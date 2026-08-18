@@ -355,21 +355,33 @@ body {
 
 /*
  * Preview-only mode: the grid drops to a single column (the editor pane is
- * not rendered at all), so the note spans the full width for screenshots.
+ * not rendered at all), and the rendered note is capped at the theme's
+ * "wide" measure (64rem, matching .mk-width-wide) and centered, so the
+ * fullscreen view keeps the margins a normal document column would have.
  */
 .playground__panes--preview-only {
   grid-template-columns: 1fr;
 }
 
+.playground__panes--preview-only .playground__preview {
+  max-width: min(64rem, 100%);
+  margin: 0 auto;
+}
+
 /*
- * The Preview pane's toggle lives next to the Run button, which is wide
- * (7rem min-width from the shared .playground__button rule). The toggle
- * is sized like the nav buttons: height matched, width relaxed, so both
- * controls fit the pane title on one line.
+ * The fullscreen toggle is an icon-only button, square like the collapsed
+ * repo link (height = width on the shared --pg-control-height) so it reads
+ * as a glyph control next to the wide "Run scripts" button.
  */
-.playground__pane-toggle {
+.playground__fullscreen-toggle {
   min-width: 0;
-  padding: 0 0.65rem;
+  width: var(--pg-control-height);
+  padding: 0;
+}
+
+/* The glyph's stroke uses the button's color via currentColor. */
+.playground__fullscreen-icon {
+  display: block;
 }
 
 /*

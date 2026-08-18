@@ -91,6 +91,35 @@ function statusLine(runState: RunState): string {
  * sync with `styles.css`. `aria-hidden` because the surrounding anchor already
  * carries the accessible name.
  */
+/**
+ * The fullscreen-mode indicator: a hand-drawn 16×16 maximize/restore
+ * glyph (four corner strokes), following the repo's self-built-icon rule
+ * (AGENTS.md) — `fill="none"` with `stroke="currentColor"` so the button's
+ * color transition drives it, like GitHubMark above. `active` swaps the
+ * corners between the outward (enter) and inward (exit) forms.
+ */
+function FullscreenGlyph({ active }: { active: boolean }): ReactElement {
+  const d = active
+    ? 'M8 3 V8 H3 M8 3 V8 H13 M8 13 V8 H13 M8 13 V8 H3'
+    : 'M3 8 V3 h5 M13 8 V3 h-5 M13 8 V13 h-5 M3 8 V13 h5';
+  return (
+    <svg
+      className="playground__fullscreen-icon"
+      viewBox="0 0 16 16"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d={d} />
+    </svg>
+  );
+}
+
 function GitHubMark(): ReactElement {
   return (
     <svg
@@ -170,6 +199,17 @@ export function App(): ReactElement {
     document.title = doc.title ? `${doc.title} — Mark II Vault` : 'Mark II Vault';
   }, [doc.title]);
 
+  // ESC leaves preview-only mode; the toggle button in the Preview pane
+  // title is the mouse path out (the title stays visible in that mode).
+  useEffect(() => {
+    if (!previewOnly) return;
+    const onKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') setPreviewOnly(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [previewOnly]);
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setDebounced(source);
@@ -203,33 +243,37 @@ export function App(): ReactElement {
 
   return (
     <div className="playground">
-      <header className="playground__header">
-        <div className="playground__header-text">
-          <h1>Mark II Vault</h1>
-          <p>{doc.description}</p>
-        </div>
-        {/*
-          The label is hidden by CSS on narrow viewports (the link collapses to
-          the icon), so the accessible name lives on `aria-label` and does not
-          depend on it — while still containing the visible word "GitHub"
-          (WCAG 2.5.3 label-in-name).
-        */}
-        <a
-          className="playground__button playground__button--ghost playground__repo-link"
-          href="https://github.com/sadigaxund/markii-vault"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Mark II Vault on GitHub"
-        >
-          <GitHubMark />
-          <span className="playground__repo-link-label">GitHub</span>
-        </a>
-      </header>
-      <NavBar
-        examples={EXAMPLES}
-        index={exampleIndex}
-        onNavigate={navigateTo}
-      />
+      {!previewOnly && (
+        <header className="playground__header">
+          <div className="playground__header-text">
+            <h1>Mark II Vault</h1>
+            <p>{doc.description}</p>
+          </div>
+          {/*
+            The label is hidden by CSS on narrow viewports (the link collapses to
+            the icon), so the accessible name lives on `aria-label` and does not
+            depend on it — while still containing the visible word "GitHub"
+            (WCAG 2.5.3 label-in-name).
+          */}
+          <a
+            className="playground__button playground__button--ghost playground__repo-link"
+            href="https://github.com/sadigaxund/markii-vault"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Mark II Vault on GitHub"
+          >
+            <GitHubMark />
+            <span className="playground__repo-link-label">GitHub</span>
+          </a>
+        </header>
+      )}
+      {!previewOnly && (
+        <NavBar
+          examples={EXAMPLES}
+          index={exampleIndex}
+          onNavigate={navigateTo}
+        />
+      )}
       <main
         className={
           previewOnly
@@ -252,18 +296,21 @@ export function App(): ReactElement {
             <span>Preview</span>
             <button
               type="button"
-              className="playground__button playground__button--ghost playground__pane-toggle"
-              onClick={() => setPreviewOnly((v) => !v)}
-            >
-              {previewOnly ? 'Show source' : 'Preview only'}
-            </button>
-            <button
-              type="button"
               className="playground__button playground__button--primary"
               onClick={() => void handleRun()}
               disabled={isRunning}
             >
               {isRunning ? 'Running…' : 'Run scripts'}
+            </button>
+            <button
+              type="button"
+              className="playground__button playground__button--ghost playground__fullscreen-toggle"
+              onClick={() => setPreviewOnly((v) => !v)}
+              aria-label={
+                previewOnly ? 'Exit preview-only mode (Esc)' : 'Preview-only mode'
+              }
+            >
+              <FullscreenGlyph active={previewOnly} />
             </button>
           </div>
           <div className="playground__preview">
@@ -271,21 +318,29 @@ export function App(): ReactElement {
               <div className="doc">{preview}</div>
             </PreviewErrorBoundary>
           </div>
-          <p className="playground__scripting-status">{statusLine(runState)}</p>
-          <p className="playground__status-bar">
-            {parseStatus.ok
-              ? `ok — ${parseStatus.directiveCount} directive${parseStatus.directiveCount === 1 ? '' : 's'} found`
-              : `parse error — ${parseStatus.error}`}
-          </p>
+          {!previewOnly && (
+            <>
+              <p className="playground__scripting-status">
+                {statusLine(runState)}
+              </p>
+              <p className="playground__status-bar">
+                {parseStatus.ok
+                  ? `ok — ${parseStatus.directiveCount} directive${parseStatus.directiveCount === 1 ? '' : 's'} found`
+                  : `parse error — ${parseStatus.error}`}
+              </p>
+            </>
+          )}
         </section>
       </main>
-      <footer className="playground__footnote">
-        Values are cached in the value store; rendering never runs scripts —
-        only clicking Run does. Edits here are throwaway: each example's
-        source lives in the examples/ folder of this repo. Scripts run on
-        the main thread for simplicity; a production host must run them in a
-        terminatable Web Worker with an external watchdog (docs/security.md).
-      </footer>
+      {!previewOnly && (
+        <footer className="playground__footnote">
+          Values are cached in the value store; rendering never runs scripts —
+          only clicking Run does. Edits here are throwaway: each example's
+          source lives in the examples/ folder of this repo. Scripts run on
+          the main thread for simplicity; a production host must run them in a
+          terminatable Web Worker with an external watchdog (docs/security.md).
+        </footer>
+      )}
     </div>
   );
 }
