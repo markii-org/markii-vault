@@ -5,6 +5,69 @@ description: A live weather dashboard for Baku, Azerbaijan, fed by Open-Meteo.
 
 # Baku weather
 
+:::figure{src="baku.jpg" alt="Baku skyline"}
+Baku, late summer.
+:::
+
+:::callout{type=info title="Right now"}
+:badge[:value[baku_weather.condition]] at :value[baku_weather.temperature]°C,
+feels like :value[baku_weather.feels_like]°C. Wind
+:value[baku_weather.wind.value] km/h from the :value[baku_weather.wind.delta],
+humidity :value[baku_weather.humidity]%.
+:::
+
+:::row{cols=4}
+::stat{data=baku_weather.temperature label="°C now"}
+::stat{data=baku_weather.feels_like label="feels like"}
+::stat{data=baku_weather.pressure label="pressure hPa"}
+::stat{data=baku_weather.precipitation label="precip mm"}
+:::
+
+::::row{cols=2}
+:::cell
+:::card{title="Wind"}
+::stat{data=baku_weather.wind}
+:::
+:::
+
+:::cell
+### Today
+
+Expect a day between :value[baku_weather.today.low]°C and
+:value[baku_weather.today.high]°C. Warm midday, cooler toward evening.
+:::
+::::
+
+::::wide
+### The week ahead
+
+Highs and lows for the next seven days:
+
+::::row{cols=3}
+:::cell
+:::card{title="Highs"}
+::chart{data=baku_weather.week kind=line}
+:::
+:::cell
+:::card{title="Lows"}
+::chart{data=baku_weather.lows kind=bar}
+:::
+:::cell
+:::card{title="Humidity"}
+::progress{data=baku_weather.humidity max=100 label="humidity"}
+:::
+::::
+::::
+
+:::details{title="Forecast notes"}
+- Last update: :value[baku_weather.updated].
+- Today: :value[baku_weather.today.low]°C to :value[baku_weather.today.high]°C.
+- Right now: :value[baku_weather.condition], wind
+  :value[baku_weather.wind.value] km/h.
+:::
+
+---
+
 ```lua {name=baku_weather}
 local params = {
   "latitude=40.4093",
@@ -86,64 +149,3 @@ return {
   code = c.weather_code,
 }
 ```
-
-:::figure{src="baku.jpg" alt="Baku skyline"}
-Baku, late summer.
-:::
-
-:::callout{type=info title="Right now"}
-:badge[:value[baku_weather.condition]] at :value[baku_weather.temperature]°C,
-feels like :value[baku_weather.feels_like]°C. Wind
-:value[baku_weather.wind.value] km/h from the :value[baku_weather.wind.delta],
-humidity :value[baku_weather.humidity]%.
-:::
-
-:::row{cols=4}
-::stat{data=baku_weather.temperature label="°C now"}
-::stat{data=baku_weather.feels_like label="feels like"}
-::stat{data=baku_weather.pressure label="pressure hPa"}
-::stat{data=baku_weather.precipitation label="precip mm"}
-:::
-
-::::row{cols=2}
-:::cell
-::card{title="Wind"}
-::stat{data=baku_weather.wind}
-:::
-:::
-
-:::cell
-### Today
-
-Expect a day between :value[baku_weather.today.low]°C and
-:value[baku_weather.today.high]°C. Warm midday, cooler toward evening.
-:::
-::::
-
-:::wide
-### The week ahead
-
-Highs and lows for the next seven days:
-
-::::row{cols=3}
-:::cell
-::card{title="Highs"}
-::chart{data=baku_weather.week kind=line}
-:::
-:::cell
-::card{title="Lows"}
-::chart{data=baku_weather.lows kind=bar}
-:::
-:::cell
-::card{title="Humidity"}
-::progress{data=baku_weather.humidity max=100 label="humidity"}
-:::
-::::
-:::
-
-:::details{title="Forecast notes"}
-- Last update: :value[baku_weather.updated].
-- Today: :value[baku_weather.today.low]°C to :value[baku_weather.today.high]°C.
-- Right now: :value[baku_weather.condition], wind
-  :value[baku_weather.wind.value] km/h.
-:::
