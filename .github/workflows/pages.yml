@@ -9,6 +9,21 @@ name: Deploy Mark II Vault to GitHub Pages
 on:
   push:
     branches: [main]
+    # Rebuild only when the deployable content changes. Path filters are
+    # checked against the whole push, so one relevant file anywhere in the
+    # commit set triggers the build. Docs-only edits (README.md, anything
+    # outside the list below) skip CI entirely; workflow_dispatch remains
+    # as the manual force.
+    paths:
+      - src/**
+      - examples/**
+      - public/**
+      - .github/workflows/pages.yml
+      - package.json
+      - package-lock.json
+      - vite.config.ts
+      - tsconfig.json
+      - index.html
   workflow_dispatch:
 
 permissions:
