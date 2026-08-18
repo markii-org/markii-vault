@@ -354,6 +354,25 @@ body {
 }
 
 /*
+ * Preview-only mode: the grid drops to a single column (the editor pane is
+ * not rendered at all), so the note spans the full width for screenshots.
+ */
+.playground__panes--preview-only {
+  grid-template-columns: 1fr;
+}
+
+/*
+ * The Preview pane's toggle lives next to the Run button, which is wide
+ * (7rem min-width from the shared .playground__button rule). The toggle
+ * is sized like the nav buttons: height matched, width relaxed, so both
+ * controls fit the pane title on one line.
+ */
+.playground__pane-toggle {
+  min-width: 0;
+  padding: 0 0.65rem;
+}
+
+/*
  * Row cells stretch to the row's tallest cell (grid default), but the
  * cards inside them are content-height — so a card holding a short block
  * (a progress bar) renders shorter than its neighbors even though its

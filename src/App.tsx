@@ -147,6 +147,9 @@ export function App(): ReactElement {
   // after a run completes purely to force the preview to re-render and pick
   // up the new store contents.
   const [renderVersion, setRenderVersion] = useState(0);
+  // Preview-only mode hides the editor pane so the rendered note spans the
+  // full width; mainly used for taking a clean screenshot of a note.
+  const [previewOnly, setPreviewOnly] = useState(false);
 
   const doc = docAt(exampleIndex);
 
@@ -227,18 +230,33 @@ export function App(): ReactElement {
         index={exampleIndex}
         onNavigate={navigateTo}
       />
-      <main className="playground__panes">
-        <section className="playground__pane">
-          <h2 className="playground__pane-title">Source</h2>
-          <CodeEditor
-            className="playground__editor"
-            value={source}
-            onChange={setSource}
-          />
-        </section>
+      <main
+        className={
+          previewOnly
+            ? 'playground__panes playground__panes--preview-only'
+            : 'playground__panes'
+        }
+      >
+        {!previewOnly && (
+          <section className="playground__pane">
+            <h2 className="playground__pane-title">Source</h2>
+            <CodeEditor
+              className="playground__editor"
+              value={source}
+              onChange={setSource}
+            />
+          </section>
+        )}
         <section className="playground__pane">
           <div className="playground__pane-title playground__pane-title--row">
             <span>Preview</span>
+            <button
+              type="button"
+              className="playground__button playground__button--ghost playground__pane-toggle"
+              onClick={() => setPreviewOnly((v) => !v)}
+            >
+              {previewOnly ? 'Show source' : 'Preview only'}
+            </button>
             <button
               type="button"
               className="playground__button playground__button--primary"
