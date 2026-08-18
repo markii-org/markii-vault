@@ -196,7 +196,7 @@ export function App(): ReactElement {
   }, []);
 
   useEffect(() => {
-    document.title = doc.title ? `${doc.title} — Mark II Vault` : 'Mark II Vault';
+    document.title = doc.title ? `${doc.title} — Vault Playground` : 'Vault Playground';
   }, [doc.title]);
 
   // ESC leaves preview-only mode; the toggle button in the Preview pane
