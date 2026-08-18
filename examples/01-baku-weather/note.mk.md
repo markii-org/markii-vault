@@ -87,7 +87,7 @@ return {
 }
 ```
 
-:::figure{src="https://raw.githubusercontent.com/sadigaxund/markii/refs/heads/main/apps/playground/public/nature.jpeg" alt="Baku skyline"}
+:::figure{src="baku.jpg" alt="Baku skyline"}
 Baku, late summer.
 :::
 
@@ -107,8 +107,9 @@ humidity :value[baku_weather.humidity]%.
 
 ::::row{cols=2}
 :::cell
+::card{title="Wind"}
 ::stat{data=baku_weather.wind}
-::progress{data=baku_weather.humidity max=100 label="humidity"}
+:::
 :::
 
 :::cell
@@ -124,8 +125,20 @@ Expect a day between :value[baku_weather.today.low]°C and
 
 Highs and lows for the next seven days:
 
+::::row{cols=3}
+:::cell
+::card{title="Highs"}
 ::chart{data=baku_weather.week kind=line}
+:::
+:::cell
+::card{title="Lows"}
 ::chart{data=baku_weather.lows kind=bar}
+:::
+:::cell
+::card{title="Humidity"}
+::progress{data=baku_weather.humidity max=100 label="humidity"}
+:::
+::::
 :::
 
 :::details{title="Forecast notes"}
