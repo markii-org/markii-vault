@@ -1,9 +1,9 @@
 ---
-title: Baku weather
+title: Weather Forecast: Baku
 description: A live weather dashboard for Baku, Azerbaijan, fed by Open-Meteo.
 ---
 
-# Baku weather
+# Weather Forecast: Baku
 
 ::::figure{src="baku.jpg" alt="Baku skyline"}
 
