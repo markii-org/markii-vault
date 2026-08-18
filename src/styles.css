@@ -352,3 +352,19 @@ body {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
 }
+
+/*
+ * Row cells stretch to the row's tallest cell (grid default), but the
+ * cards inside them are content-height — so a card holding a short block
+ * (a progress bar) renders shorter than its neighbors even though its
+ * cell is full-height. Making each cell a flex column and letting its
+ * card grow fills the cell, so every card in a row shares one height.
+ */
+.mk-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.mk-cell > .mk-card {
+  flex: 1;
+}
