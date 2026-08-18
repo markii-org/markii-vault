@@ -294,24 +294,26 @@ export function App(): ReactElement {
         <section className="playground__pane">
           <div className="playground__pane-title playground__pane-title--row">
             <span>Preview</span>
-            <button
-              type="button"
-              className="playground__button playground__button--primary"
-              onClick={() => void handleRun()}
-              disabled={isRunning}
-            >
-              {isRunning ? 'Running…' : 'Run scripts'}
-            </button>
-            <button
-              type="button"
-              className="playground__button playground__button--ghost playground__fullscreen-toggle"
-              onClick={() => setPreviewOnly((v) => !v)}
-              aria-label={
-                previewOnly ? 'Exit preview-only mode (Esc)' : 'Preview-only mode'
-              }
-            >
-              <FullscreenGlyph active={previewOnly} />
-            </button>
+            <div className="playground__pane-actions">
+              <button
+                type="button"
+                className="playground__button playground__button--primary"
+                onClick={() => void handleRun()}
+                disabled={isRunning}
+              >
+                {isRunning ? 'Running…' : 'Run scripts'}
+              </button>
+              <button
+                type="button"
+                className="playground__button playground__button--ghost playground__fullscreen-toggle"
+                onClick={() => setPreviewOnly((v) => !v)}
+                aria-label={
+                  previewOnly ? 'Exit preview-only mode (Esc)' : 'Preview-only mode'
+                }
+              >
+                <FullscreenGlyph active={previewOnly} />
+              </button>
+            </div>
           </div>
           <div className="playground__preview">
             <PreviewErrorBoundary resetKey={debounced}>

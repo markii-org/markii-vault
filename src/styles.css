@@ -368,6 +368,14 @@ body {
   margin: 0 auto;
 }
 
+/* Groups the pane-title controls so space-between has exactly two ends:
+   the Preview label on the left, both buttons on the right. */
+.playground__pane-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /*
  * The fullscreen toggle is an icon-only button, square like the collapsed
  * repo link (height = width on the shared --pg-control-height) so it reads
