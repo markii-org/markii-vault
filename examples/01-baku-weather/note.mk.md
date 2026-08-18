@@ -5,61 +5,88 @@ description: A live weather dashboard for Baku, Azerbaijan, fed by Open-Meteo.
 
 # Baku weather
 
-:::figure{src="baku.jpg" alt="Baku skyline"}
+::::figure{src="baku.jpg" alt="Baku skyline"}
+
+:::center
 Baku, late summer.
 :::
 
-:::callout{type=info title="Right now"}
-:badge[:value[baku_weather.condition]] at :value[baku_weather.temperature]°C,
-feels like :value[baku_weather.feels_like]°C. Wind
-:value[baku_weather.wind.value] km/h from the :value[baku_weather.wind.delta],
-humidity :value[baku_weather.humidity]%.
+::::
+
+
+:::callout{type=info title="Right Now in Baku"}
+
+Current conditions report a :badge[:value[baku_weather.condition]] at :value[baku_weather.temperature]°C (feels like :value[baku_weather.feels_like]°C), with humidity at :value[baku_weather.humidity]% and winds from the :value[baku_weather.wind.delta] at :value[baku_weather.wind.value] km/h.
+
 :::
 
-:::row{cols=4}
+## Forecast
+
+
+:::::row{cols=4}
+::::card
+:::center
 ::stat{data=baku_weather.temperature label="°C now"}
+::::
+
+::::card
+:::center
 ::stat{data=baku_weather.feels_like label="feels like"}
+::::
+
+::::card
+:::center
 ::stat{data=baku_weather.pressure label="pressure hPa"}
+::::
+
+::::card
+:::center
 ::stat{data=baku_weather.precipitation label="precip mm"}
-:::
+::::
+:::::
 
-::::row{cols=2}
-:::cell
-:::card{title="Wind"}
+
+:::::row{cols=2}
+
+::::card{title="Wind"}
+:::center
 ::stat{data=baku_weather.wind}
-:::
-:::
-
-:::cell
-### Today
-
-Expect a day between :value[baku_weather.today.low]°C and
-:value[baku_weather.today.high]°C. Warm midday, cooler toward evening.
 :::
 ::::
 
-::::wide
+:::card{title="Today"}
+Expect a day  
+between :value[baku_weather.today.low]° 
+and :value[baku_weather.today.high]°C.
+:::
+
+:::::
+
+
 ### The week ahead
 
 Highs and lows for the next seven days:
 
-::::row{cols=3}
-:::cell
+:::::row{cols=3}
+
+::::cell
 :::card{title="Highs"}
 ::chart{data=baku_weather.week kind=line}
-:::
-:::cell
-:::card{title="Lows"}
-::chart{data=baku_weather.lows kind=bar}
-:::
-:::cell
-:::card{title="Humidity"}
-::progress{data=baku_weather.humidity max=100 label="humidity"}
-:::
-::::
 ::::
 
-:::details{title="Forecast notes"}
+::::cell
+:::card{title="Lows"}
+::chart{data=baku_weather.lows kind=bar}
+::::
+
+::::cell
+:::card{title="Humidity"}
+::progress{data=baku_weather.humidity max=100 label="humidity"}
+::::
+
+:::::
+
+:::details{title="Forecast Notes"}
 - Last update: :value[baku_weather.updated].
 - Today: :value[baku_weather.today.low]°C to :value[baku_weather.today.high]°C.
 - Right now: :value[baku_weather.condition], wind

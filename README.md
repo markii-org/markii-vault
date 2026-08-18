@@ -1,6 +1,6 @@
 # Mark II Vault
 [![Live Demo](https://img.shields.io/badge/Live_App-Online-success?style=flat)](https://sadigaxund.github.io/markii-vault/)
-[![See Repo](https://img.shields.io/badge/Live_App-Online-success?style=flat)](https://github.com/sadigaxund/markii)
+[![See Repo](https://img.shields.io/badge/See_Repo-GitHub-success?style=flat)](https://github.com/sadigaxund/markii)
 
 Curated examples of `Mark II` file format
 
