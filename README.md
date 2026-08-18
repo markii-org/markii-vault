@@ -12,7 +12,8 @@ Mark II is an extensible markdown format that you can upgrade with your own Reac
 
 | Example | Description | URL | Screenshot |
 | --- | --- | --- | --- |
-| Baku weather | A live weather dashboard for Baku, Azerbaijan, fed by Open-Meteo. | [https://sadigaxund.github.io/markii-vault/#baku-weather](https://sadigaxund.github.io/markii-vault/#baku-weather) | coming soon |
+| Baku weather | A live weather dashboard for Baku, Azerbaijan, fed by Open-Meteo. | [#baku-weather](https://sadigaxund.github.io/markii-vault/#baku-weather) | <img width="400" height="600" alt="image" src="https://github.com/user-attachments/assets/1db91eac-ddb7-434b-afe7-b6bfa766b1d3" />
+ |
 
 ## License
 
