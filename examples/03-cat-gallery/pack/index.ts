@@ -2,7 +2,6 @@ import { createRegistry } from '@markii/react';
 import type { Registry } from '@markii/react';
 import { CatCard } from './cat-card';
 import { CatFinder } from './cat-finder';
-import { CatGallery } from './cat-gallery';
 
 /**
  * The `cat` pack: photo components for the Cat Gallery example, shipped
@@ -16,7 +15,6 @@ import { CatGallery } from './cat-gallery';
  * shared, guarded extraction).
  */
 export const catRegistry: Registry = createRegistry({
-  'cat-gallery': { component: CatGallery },
   'cat-card': { component: CatCard },
   'cat-finder': { component: CatFinder },
 });

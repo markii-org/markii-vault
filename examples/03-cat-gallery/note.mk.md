@@ -18,15 +18,9 @@ Every run of the script below pulls ten photos from the Cat API — one per name
 ::stat{data=cats.stats.largest label="largest photo"}
 ::::
 
-## The gallery
-
-Ten breeds, one photo each — a full 5×2 wall. Among them are :badge[:value[cats.stats.breeds]] breeds this run.
-
-::cat-gallery{data=cats.gallery max=10}
-
 ## Meet the breeds
 
-Pick a breed chip to narrow the wall to that cat and read its profile — origin, temperament, and a link to its Wikipedia card.
+The wall below starts at "All breeds" — ten named cats, a full 5×2 grid. Pick a breed chip to narrow it and read that cat's profile — origin, temperament, and a link to its Wikipedia card.
 
 ::cat-finder{data=cats.gallery}
 
@@ -39,7 +33,7 @@ The largest photo gets the spotlight.
 :::details{title="About this note"}
 - Fed by the Cat API (`api.thecatapi.com/v1/images/search` with a comma-separated `breed_ids`), one request per run, the batch cached for 10 minutes under a single key.
 - Ten curated breeds fill the 5×2 wall exactly: the API returns only photos of those breeds, each carrying its breed data. A failed request aborts the run with a clear error instead of a half-filled wall.
-- The `cat` pack ships `::cat-gallery`, `::cat-card`, and the interactive `::cat-finder`, all data-bound like the stdlib components.
+- The `cat` pack ships the interactive `::cat-finder` (the wall + breed chips) and `::cat-card` (featured photo), all data-bound like the stdlib components.
 :::
 
 ---

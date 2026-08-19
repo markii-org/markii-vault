@@ -42,7 +42,11 @@ function buildIndex(): ExampleDoc[] {
     eager: true,
   });
   return Object.entries(modules).map(([path, source]) => {
-    const dir = path.split('/')[2] ?? '';
+    // The example folder is always the segment right before note.mk.md,
+    // whatever depth the glob resolves at ('../examples/…' from src/,
+    // '../../examples/…' from playground/src/ — a fixed index like [1]
+    // would silently shift to 'examples' when the app moves).
+    const dir = path.split('/').at(-2) ?? '';
     const slug = dir.replace(/^\d+-/, '');
     const frontmatter = parseFrontmatter(source);
     return {

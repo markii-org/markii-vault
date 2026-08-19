@@ -631,14 +631,13 @@ a.mk-hn-list__title:hover {
 
 /*
  * The `cat` pack's look: warm gray frames, rounded corners, and the
- * same #3b82f6 link blue. Gallery and finder share the tile styles
- * (.mk-cat-figure); the card uses the same frame but lets its photo
+ * same #3b82f6 link blue. The finder's wall and the card share the tile
+ * styles (.mk-cat-figure); the card uses the same frame but lets its photo
  * own the space with a scrimmed caption overlay. The `--stale`/`--error`
  * hooks come from the pack's `stateClassName` (guard.ts), mirroring the
  * reference components.
  */
 
-.mk-cat-gallery,
 .mk-cat-finder__grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -646,7 +645,6 @@ a.mk-hn-list__title:hover {
 }
 
 @media (max-width: 46rem) {
-  .mk-cat-gallery,
   .mk-cat-finder__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -827,13 +825,11 @@ a.mk-hn-list__title:hover {
   text-decoration: underline;
 }
 
-.mk-cat-gallery--stale,
 .mk-cat-card--stale,
 .mk-cat-finder--stale {
   opacity: 0.7;
 }
 
-.mk-cat-gallery--error,
 .mk-cat-card--error,
 .mk-cat-finder--error {
   opacity: 0.4;

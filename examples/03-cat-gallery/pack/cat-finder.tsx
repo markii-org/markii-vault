@@ -1,9 +1,52 @@
 import { useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
 import type { MarkComponentProps } from '@markii/react';
-import { failureTitle, isUnreadable, safeExtract, stateClassName } from './guard';
-import { extractPhotos } from './cat-gallery';
-import type { Photo } from './cat-gallery';
+import { failureTitle, int, isUnreadable, safeExtract, stateClassName, str } from './guard';
+
+const MAX_EXTRACT = 30;
+
+export interface Photo {
+  url: string;
+  breed: string;
+  origin: string;
+  temperament: string;
+  wikipedia: string | undefined;
+  width: number;
+  height: number;
+}
+
+/**
+ * Extracts plain photo records off a bound array. Only strings and finite
+ * numbers ever leave this function (guard.ts's safeExtract wraps the whole
+ * walk), so nothing hostile escapes into `src`/`alt`. A photo without an
+ * https url is dropped outright — the Cat API serves everything over https,
+ * and an unhandled scheme should never reach an `<img>`.
+ */
+export function extractPhotos(data: unknown): Photo[] {
+  if (!Array.isArray(data)) return [];
+  const photos: Photo[] = [];
+  for (const entry of data) {
+    if (photos.length >= MAX_EXTRACT) break;
+    if (entry === null || typeof entry !== 'object' || Array.isArray(entry)) {
+      continue;
+    }
+    const record = entry as Record<string, unknown>;
+    const rawUrl = str(record.url);
+    if (!/^https:\/\//.test(rawUrl)) continue;
+    photos.push({
+      url: rawUrl,
+      breed: str(record.breed),
+      origin: str(record.origin),
+      temperament: str(record.temperament),
+      wikipedia: /^https?:\/\//.test(str(record.wikipedia))
+        ? str(record.wikipedia)
+        : undefined,
+      width: int(record.width),
+      height: int(record.height),
+    });
+  }
+  return photos;
+}
 
 interface Meet {
   breed: string;
@@ -40,10 +83,10 @@ function buildMeets(photos: Photo[]): Meet[] {
 
 /**
  * `::cat-finder{data=...}` — an interactive breed browser bound to the
- * same photo array the gallery uses. A chip row shows every breed present
- * in the data; picking one narrows the wall below to that breed's photos
- * and opens a profile strip (origin, temperament, Wikipedia link). The
- * whole component is plain React state on top of the pack's guarded
+ * photo array the note's script produces. A chip row shows every breed
+ * present in the data; picking one narrows the wall below to that breed's
+ * photos and opens a profile strip (origin, temperament, Wikipedia link).
+ * The whole component is plain React state on top of the pack's guarded
  * extraction — chip labels are derived from the data, never from the
  * markup, so an unbound or failed binding shows the chips-less quiet
  * empty state per spec §4.
