@@ -25,18 +25,19 @@ import { getParseStatus } from './parse-status';
 import { EXAMPLES } from './examples';
 import type { ExampleDoc } from './examples';
 import { NavBar } from './NavBar';
-import { hnRegistry } from '../examples/02-hn-pulse/pack';
+import { hnRegistry } from '../../examples/02-hn-pulse/pack';
+import { catRegistry } from '../../examples/03-cat-gallery/pack';
 
 const DEBOUNCE_MS = 200;
 
 /**
- * The vault's registry: the standard component set plus the `hn` pack,
- * merged exactly the way an application installs a pack (docs/packs.md —
- * packs are app-side configuration, never note-side). `mergeRegistries`
- * gives later entries precedence, so none of the standard names can be
- * shadowed by the pack.
+ * The vault's registry: the standard component set plus every pack the
+ * examples ship with, merged exactly the way an application installs
+ * packs (docs/packs.md — packs are app-side configuration, never
+ * note-side). `mergeRegistries` gives later entries precedence, so none
+ * of the standard names can be shadowed by a pack.
  */
-const registry = mergeRegistries(defaultRegistry, hnRegistry);
+const registry = mergeRegistries(defaultRegistry, hnRegistry, catRegistry);
 
 /**
  * The Lua executor closes over one fixed capability configuration for the

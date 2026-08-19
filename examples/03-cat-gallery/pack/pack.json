@@ -1,0 +1,8 @@
+{
+  "name": "cat",
+  "engine": "react",
+  "components": {
+    "cat-gallery": "./cat-gallery.tsx",
+    "cat-card": "./cat-card.tsx"
+  }
+}

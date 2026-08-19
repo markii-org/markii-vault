@@ -48,15 +48,17 @@ export function createFetchNetProvider(): NetProvider {
  * Curated allowlist for the note scripts in this showcase (the vault's
  * `examples/` folder). Every host a note calls must be listed here:
  * `api.github.com` (a demo REST call), `api.open-meteo.com` (the weather
- * note), and `hn.algolia.com` (the HN pulse note). This mirrors what a
- * real host does with its SSRF policy surface (docs/scripting.md §10):
- * explicit per-host grants, never wildcards.
+ * note), `hn.algolia.com` (the HN pulse note), and `api.thecatapi.com`
+ * (the cat gallery note). This mirrors what a real host does with its
+ * SSRF policy surface (docs/scripting.md §10): explicit per-host grants,
+ * never wildcards.
  */
 export const DEMO_NET_GRANTS: NetGrants = {
   get: [
     'api.github.com',
     'api.open-meteo.com',
     'hn.algolia.com',
+    'api.thecatapi.com',
   ],
   post: [],
 };

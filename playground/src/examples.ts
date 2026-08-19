@@ -36,7 +36,7 @@ function parseFrontmatter(raw: string): {
  * editor shows.
  */
 function buildIndex(): ExampleDoc[] {
-  const modules = import.meta.glob('../examples/*/note.mk.md', {
+  const modules = import.meta.glob('../../examples/*/note.mk.md', {
     query: '?raw',
     import: 'default',
     eager: true,
