@@ -6,63 +6,66 @@ uses: [hn]
 
 # Tech Community Pulse
 
-:::callout{type=info title="Right now on the front page"}
+:::::row{cols=4}
 
-The front page currently holds :value[pulse.stats.threads] threads, totalling :value[pulse.stats.points] points and :value[pulse.stats.comments] comments, with :value[pulse.stats.domain] as the top domain.
-
-:::
-
-::::row{cols=4}
+::::card
+:::center
 ::stat{data=pulse.stats.threads label="front-page threads"}
-::stat{data=pulse.stats.points label="total points"}
-::stat{data=pulse.stats.comments label="total comments"}
-::stat{data=pulse.stats.domain label="top domain"}
+:::
 ::::
+
+::::card
+:::center
+::stat{data=pulse.stats.points label="total points"}
+:::
+::::
+
+::::card
+:::center
+::stat{data=pulse.stats.comments label="total comments"}
+:::
+::::
+
+::::card
+:::center
+::stat{data=pulse.stats.domain label="top domain"}
+:::
+::::
+
+:::::
 
 ## Trending right now
 
 The current front page, ranked two ways: by points, and by how fast each thread's comment count is moving relative to its age.
 
 ::::row{cols=2}
-:::card{title="Top threads"}
-::hn-list{data=pulse.front max=8}
+
+:::card{title="Top Threads"}
+::hn-list{data=pulse.front max=6}
 :::
 
-:::card{title="Fastest-moving threads"}
-::hn-list{data=pulse.front by=velocity max=6}
+:::card{title="Trending Threads"}
+::hn-list{data=pulse.front by=velocity max=5}
 :::
+
 ::::
 
 ## Top domains
 
 Where the front page's stories actually point, counted and weighted by points.
 
-::hn-domains{data=pulse.domains max=6}
-
-## What the community is talking about
-
-The most frequent content words across front-page titles.
-
+::::cell
+:::right
 ::hn-topics{data=pulse.topics max=10}
-
-## Comment velocity
-
-::::row{cols=2}
-:::card{title="Threads started, per hour"}
-::hn-activity{data=pulse.pool}
-:::
-
-:::card{title="Most discussed, recent stories"}
-::hn-list{data=pulse.pool by=comments max=6}
 :::
 ::::
 
-:::details{title="About this note"}
-- Fed by the Algolia Hacker News Search API, cached together for 5 minutes.
-- Velocity is comments per hour since posting, computed at render time from each story's age (the sandbox deliberately has no clock, so the script returns raw timestamps and the `hn-*` components do the time math).
-- `max=` caps the rows; `by=` picks the sort key (`points`, `comments`, or `velocity`).
-- Last observed update: :value[pulse.updated].
+::hn-domains{data=pulse.domains max=6}
+
+:::card{title="Threads / per hour"}
+::hn-activity{data=pulse.pool}
 :::
+
 
 ---
 
