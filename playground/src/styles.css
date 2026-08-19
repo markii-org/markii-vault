@@ -629,10 +629,27 @@ a.mk-hn-list__title:hover {
  * `stateClassName` (guard.ts), mirroring the reference components.
  */
 
-.mk-cat-gallery {
+/*
+ * The `cat` pack's look: warm gray frames, rounded corners, and the
+ * same #3b82f6 link blue. Gallery and finder share the tile styles
+ * (.mk-cat-figure); the card uses the same frame but lets its photo
+ * own the space with a scrimmed caption overlay. The `--stale`/`--error`
+ * hooks come from the pack's `stateClassName` (guard.ts), mirroring the
+ * reference components.
+ */
+
+.mk-cat-gallery,
+.mk-cat-finder__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.75rem;
+}
+
+@media (max-width: 46rem) {
+  .mk-cat-gallery,
+  .mk-cat-finder__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .mk-cat-figure {
@@ -656,53 +673,67 @@ a.mk-hn-list__title:hover {
   padding: 0.35rem 0.6rem 0.45rem;
   color: #666;
   font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mk-cat-card {
-  display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  align-items: center;
-  gap: 1.25rem;
+  position: relative;
   margin: 0;
   border: 1px solid #e4e4e7;
   border-radius: 8px;
-  padding: 0.75rem;
-  background: #ffffff;
+  overflow: hidden;
+  background: #f4f4f5;
 }
 
 .mk-cat-card__photo {
   display: block;
   width: 100%;
-  max-height: 22rem;
-  border-radius: 6px;
+  aspect-ratio: 16 / 9;
+  max-height: 30rem;
   object-fit: cover;
 }
 
+/* The profile rides a scrim over the photo: no more label-vs-photo
+ * contest for the card's height — the photo is the card, and the text
+ * only borrows its lower edge. On the widest cells the whole overlay
+ * tucks into the bottom-left; it never caps the body's top. */
 .mk-cat-card__info {
+  position: absolute;
+  inset: auto 0 0 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 1.75rem 1rem 0.85rem;
+  background: linear-gradient(to top, rgba(9, 9, 11, 0.8), rgba(9, 9, 11, 0));
+  color: #fafafa;
 }
 
 .mk-cat-card__breed {
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.15rem;
 }
 
 .mk-cat-card__meta {
-  color: #666;
+  color: #e4e4e7;
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
 }
 
 .mk-cat-card__temperament {
   margin: 0;
-  color: #1a1a1a;
-  font-size: 0.9rem;
+  max-width: 100%;
+  color: #e4e4e7;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mk-cat-card__link {
-  color: #3b82f6;
+  color: #93c5fd;
   font-size: 0.85rem;
   text-decoration: none;
 }
@@ -711,12 +742,99 @@ a.mk-hn-list__title:hover {
   text-decoration: underline;
 }
 
+.mk-cat-finder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mk-cat-finder__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.mk-cat-finder__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid #e4e4e7;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #3f3f46;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.mk-cat-finder__chip:hover {
+  border-color: #cbd5e1;
+}
+
+.mk-cat-finder__chip--active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.mk-cat-finder__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-cat-finder__chip--active .mk-cat-finder__count {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.mk-cat-finder__profile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.mk-cat-finder__origin {
+  color: #3f3f46;
+  font-size: 0.85rem;
+}
+
+.mk-cat-finder__temperament {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 0.9rem;
+}
+
+.mk-cat-finder__link {
+  align-self: flex-start;
+  color: #3b82f6;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.mk-cat-finder__link:hover {
+  text-decoration: underline;
+}
+
 .mk-cat-gallery--stale,
-.mk-cat-card--stale {
+.mk-cat-card--stale,
+.mk-cat-finder--stale {
   opacity: 0.7;
 }
 
 .mk-cat-gallery--error,
-.mk-cat-card--error {
+.mk-cat-card--error,
+.mk-cat-finder--error {
   opacity: 0.4;
 }

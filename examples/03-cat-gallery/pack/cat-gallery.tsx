@@ -4,9 +4,12 @@ import { failureTitle, int, isUnreadable, safeExtract, stateClassName, str } fro
 
 const MAX_EXTRACT = 30;
 
-interface Photo {
+export interface Photo {
   url: string;
   breed: string;
+  origin: string;
+  temperament: string;
+  wikipedia: string | undefined;
   width: number;
   height: number;
 }
@@ -18,7 +21,7 @@ interface Photo {
  * https url is dropped outright — the Cat API serves everything over https,
  * and an unhandled scheme should never reach an `<img>`.
  */
-function extractPhotos(data: unknown): Photo[] {
+export function extractPhotos(data: unknown): Photo[] {
   if (!Array.isArray(data)) return [];
   const photos: Photo[] = [];
   for (const entry of data) {
@@ -32,6 +35,11 @@ function extractPhotos(data: unknown): Photo[] {
     photos.push({
       url: rawUrl,
       breed: str(record.breed),
+      origin: str(record.origin),
+      temperament: str(record.temperament),
+      wikipedia: /^https?:\/\//.test(str(record.wikipedia))
+        ? str(record.wikipedia)
+        : undefined,
       width: int(record.width),
       height: int(record.height),
     });
@@ -40,11 +48,13 @@ function extractPhotos(data: unknown): Photo[] {
 }
 
 /**
- * `::cat-gallery{data=... max=8}` — a responsive photo grid bound to an
- * array of {url, breed, width, height}. Tiles keep a uniform 4:3 crop and
- * caption each photo with its breed (or "mystery cat" when the API had no
- * breed data) and pixel dimensions. Unbound or failed bindings render an
- * empty grid with only a tooltip, per spec §4's quiet presentation.
+ * `::cat-gallery{data=... max=10}` — a responsive photo grid bound to an
+ * array of {url, breed, origin, temperament, wikipedia, width, height}.
+ * Five fixed columns keep the wall in tidy rows (10 photos = exactly 2
+ * rows); tiles keep a uniform 4:3 crop and caption each photo with its
+ * breed (or "mystery cat" when the API had no breed data) and pixel
+ * dimensions. Unbound or failed bindings render an empty grid with only a
+ * tooltip, per spec §4's quiet presentation.
  */
 export function CatGallery({
   attributes,
@@ -57,7 +67,7 @@ export function CatGallery({
     () => [],
   );
 
-  const max = Math.min(Math.max(int(attributes.max, 8), 1), 30);
+  const max = Math.min(Math.max(int(attributes.max, 10), 1), 30);
   const photos = bound.fields.slice(0, max);
 
   return (

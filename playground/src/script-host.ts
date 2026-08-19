@@ -27,13 +27,24 @@ import type {
  * as an ordinary `'runtime'` failure). A non-2xx HTTP response is NOT an
  * error here — it is a normal `NetResponse` with that status code; the
  * script (or `net.fetch_json`'s JSON-parse step) decides what to do with it.
+ *
+ * One per-host wiring: the Cat API only returns breed metadata when the
+ * request carries its documented public demo key, so requests to
+ * `api.thecatapi.com` get the `x-api-key: DEMO-API-KEY` header injected
+ * here. The key is public (`DEMO-API-KEY`, straight from TheCatAPI docs),
+ * not a secret the sandbox could leak; the host stays the only party that
+ * can decide which hosts get which headers.
  */
 export function createFetchNetProvider(): NetProvider {
   return {
     async get(url: string): Promise<NetResponse> {
       let response: Response;
       try {
-        response = await fetch(url);
+        const headers = new Headers();
+        if (new URL(url).hostname === 'api.thecatapi.com') {
+          headers.set('x-api-key', 'DEMO-API-KEY');
+        }
+        response = await fetch(url, { headers });
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         throw new Error(`fetch failed for "${url}": ${message}`);

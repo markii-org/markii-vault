@@ -1,6 +1,7 @@
 import { createRegistry } from '@markii/react';
 import type { Registry } from '@markii/react';
 import { CatCard } from './cat-card';
+import { CatFinder } from './cat-finder';
 import { CatGallery } from './cat-gallery';
 
 /**
@@ -10,10 +11,12 @@ import { CatGallery } from './cat-gallery';
  * this file; the application installs the pack at build time the way
  * docs/packs.md describes — registry entries under a namespaced prefix
  * (`cat-`), the note itself carries only `uses: [cat]` in frontmatter and
- * never any runtime. Both components are blocks bound to `data=` paths in
- * the value store.
+ * never any runtime. All components are blocks bound to `data=` paths in
+ * the value store; `cat-finder` is the interactive one (chip row over
+ * shared, guarded extraction).
  */
 export const catRegistry: Registry = createRegistry({
   'cat-gallery': { component: CatGallery },
   'cat-card': { component: CatCard },
+  'cat-finder': { component: CatFinder },
 });

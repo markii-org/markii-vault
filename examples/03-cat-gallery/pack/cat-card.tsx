@@ -38,12 +38,13 @@ function extractCat(data: unknown): FeaturedCat | undefined {
 }
 
 /**
- * `::cat-card{data=...}` — a featured-photo card for a single cat bound to
- * {url, breed, origin, temperament, wikipedia, width, height}: the photo
- * beside a breed header, origin and dimensions, the breed's personality
- * blurb, and a link to its Wikipedia card when the API provided one.
- * Unbound or failed bindings render an empty figure with only a tooltip,
- * per spec §4's quiet presentation.
+ * `::cat-card{data=...}` — a featured-photo hero for a single cat bound to
+ * {url, breed, origin, temperament, wikipedia, width, height}. The photo
+ * fills the whole card; its profile — breed, origin and dimensions,
+ * temperament, a Wikipedia link when the API provided one — sits in a
+ * translucent scrim over the photo's lower edge, so the picture, not the
+ * label, owns the space. Unbound or failed bindings render an empty figure
+ * with only a tooltip, per spec §4's quiet presentation.
  */
 export function CatCard({
   data,
