@@ -1,0 +1,10 @@
+{
+  "name": "hn",
+  "engine": "react",
+  "components": {
+    "hn-list": "./hn-list.tsx",
+    "hn-domains": "./hn-domains.tsx",
+    "hn-topics": "./hn-topics.tsx",
+    "hn-activity": "./hn-activity.tsx"
+  }
+}

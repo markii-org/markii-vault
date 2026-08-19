@@ -25,7 +25,7 @@ import { getParseStatus } from './parse-status';
 import { EXAMPLES } from './examples';
 import type { ExampleDoc } from './examples';
 import { NavBar } from './NavBar';
-import { hnRegistry } from './packs/hn';
+import { hnRegistry } from '../examples/02-hn-pulse/pack';
 
 const DEBOUNCE_MS = 200;
 

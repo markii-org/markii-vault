@@ -409,7 +409,7 @@ body {
 }
 
 /*
- * ---------- `hn` pack components (src/packs/hn) ----------
+ * ---------- `hn` pack components (examples/02-hn-pulse/pack) ----------
  *
  * Dashboard chrome for the HN pulse note, drawn in the page palette: ink
  * text #1a1a1a, muted #666, link blue #3b82f6 (the same accent the
@@ -572,9 +572,15 @@ a.mk-hn-list__title:hover {
   font-variant-numeric: tabular-nums;
 }
 
+/*
+ * The histogram sits in a card that stretches to its row's tallest cell,
+ * so bars are vertically centered rather than hugging the bottom — the
+ * dead space above and below reads as part of the card, not as a chart
+ * that fell out of its container.
+ */
 .mk-hn-activity {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 2px;
   height: 6.5rem;
 }
