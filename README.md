@@ -13,7 +13,7 @@ Mark II is an extensible markdown format that you can upgrade with your own Reac
 | --- | --- | --- | --- |
 | Weather Forecast: Baku | A live weather dashboard for Baku, Azerbaijan, fed by Open-Meteo. | [#baku-weather][baku-link] | ![Baku Weather][baku-img] |
 | Tech Community Pulse | A live Hacker News pulse dashboard: trending threads, top domains, and comment velocity, fed by the Algolia HN Search API. | [#hn-pulse][hn-link] | ![HN Pulse][hn-img] |
-| Cat Gallery | Ten breed-accurate cat photos in a 5×2 wall plus an interactive breed finder, fed by the Cat API. | [#cat-gallery][cat-link] | |
+| Cat Gallery | Ten breed-accurate cat photos in a 5×2 wall plus an interactive breed finder, fed by the Cat API. | [#cat-gallery][cat-link] | ![Cat Gallery][cat-img] |
 
 <!-- You can dump all these references at the absolute bottom of your README file -->
 [baku-link]: https://sadigaxund.github.io/markii-vault/#baku-weather
@@ -23,6 +23,7 @@ Mark II is an extensible markdown format that you can upgrade with your own Reac
 [hn-img]: https://github.com/user-attachments/assets/6f61478a-4631-4add-ba10-c537984b46a1
 
 [cat-link]: https://sadigaxund.github.io/markii-vault/#cat-gallery
+[cat-img]: https://github.com/user-attachments/assets/a11390c0-145c-4e45-94ec-149d6e28a38d
 
 ## License
 
