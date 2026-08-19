@@ -407,3 +407,195 @@ body {
 .mk-cell > .mk-card {
   flex: 1;
 }
+
+/*
+ * ---------- `hn` pack components (src/packs/hn) ----------
+ *
+ * Dashboard chrome for the HN pulse note, drawn in the page palette: ink
+ * text #1a1a1a, muted #666, link blue #3b82f6 (the same accent the
+ * `callout{type=info}` border uses), slates from the badge/table set
+ * (#e2e8f0/#334155, #f8fafc). The `--stale`/`--error` hooks come from the
+ * pack's `stateClassName` (guard.ts) and mirror the reference components'
+ * class-only failure presentation.
+ */
+
+.mk-hn-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mk-hn-list__row {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  grid-template-areas:
+    'rank titles'
+    'rank meta';
+  align-items: baseline;
+  column-gap: 0.4rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid #eceef1;
+}
+
+.mk-hn-list__row:first-child {
+  border-top: none;
+}
+
+.mk-hn-list__rank {
+  grid-area: rank;
+  justify-self: end;
+  color: #999;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-hn-list__titles {
+  grid-area: titles;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  min-width: 0;
+}
+
+.mk-hn-list__title {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+a.mk-hn-list__title {
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+a.mk-hn-list__title:hover {
+  text-decoration: underline;
+}
+
+.mk-hn-list__domain {
+  padding: 0 0.4rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.mk-hn-list__meta {
+  grid-area: meta;
+  color: #666;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-hn-domains {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.mk-hn-domains__row {
+  display: grid;
+  grid-template-columns: minmax(5rem, 9rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+}
+
+.mk-hn-domains__name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mk-hn-domains__track {
+  height: 0.55rem;
+  border-radius: 3px;
+  background: #eef0f2;
+  overflow: hidden;
+}
+
+.mk-hn-domains__bar {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: #3b82f6;
+}
+
+.mk-hn-domains__value {
+  color: #666;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.mk-hn-topics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.mk-hn-topics__term {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #334155;
+  font-weight: 600;
+}
+
+.mk-hn-topics__term--1 {
+  font-size: 0.78rem;
+}
+
+.mk-hn-topics__term--2 {
+  font-size: 0.9rem;
+}
+
+.mk-hn-topics__term--3 {
+  font-size: 1.05rem;
+}
+
+.mk-hn-topics__term--4 {
+  font-size: 1.2rem;
+}
+
+.mk-hn-topics__count {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-hn-activity {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 6.5rem;
+}
+
+.mk-hn-activity__bar {
+  flex: 1;
+  min-width: 0;
+  border-radius: 2px 2px 0 0;
+  background: #3b82f6;
+}
+
+.mk-hn-list--stale,
+.mk-hn-domains--stale,
+.mk-hn-topics--stale,
+.mk-hn-activity--stale {
+  opacity: 0.7;
+}
+
+.mk-hn-list--error,
+.mk-hn-domains--error,
+.mk-hn-topics--error,
+.mk-hn-activity--error {
+  opacity: 0.4;
+}

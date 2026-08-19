@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
-import { renderMark } from '@markii/react';
+import { renderMark, mergeRegistries } from '@markii/react';
 import { defaultRegistry } from '@markii/react/components';
 import { extractScripts, parse } from '@markii/core';
 import { createValueStore, runDocumentScripts } from '@markii/runtime';
@@ -25,8 +25,18 @@ import { getParseStatus } from './parse-status';
 import { EXAMPLES } from './examples';
 import type { ExampleDoc } from './examples';
 import { NavBar } from './NavBar';
+import { hnRegistry } from './packs/hn';
 
 const DEBOUNCE_MS = 200;
+
+/**
+ * The vault's registry: the standard component set plus the `hn` pack,
+ * merged exactly the way an application installs a pack (docs/packs.md —
+ * packs are app-side configuration, never note-side). `mergeRegistries`
+ * gives later entries precedence, so none of the standard names can be
+ * shadowed by the pack.
+ */
+const registry = mergeRegistries(defaultRegistry, hnRegistry);
 
 /**
  * The Lua executor closes over one fixed capability configuration for the
@@ -237,7 +247,7 @@ export function App(): ReactElement {
   // purely so this memo recomputes after a run mutates `storeRef.current`
   // in place (see the doc comment above `renderVersion`'s declaration).
   const preview = useMemo(
-    () => renderMark(debounced, defaultRegistry, storeRef.current),
+    () => renderMark(debounced, registry, storeRef.current),
     [debounced, renderVersion],
   );
 
