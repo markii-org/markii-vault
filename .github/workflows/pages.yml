@@ -47,6 +47,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: playground/package-lock.json
 
       - run: npm ci
         working-directory: playground
