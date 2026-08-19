@@ -398,6 +398,12 @@ body {
  * (a progress bar) renders shorter than its neighbors even though its
  * cell is full-height. Making each cell a flex column and letting its
  * card grow fills the cell, so every card in a row shares one height.
+ *
+ * The card itself is a flex column and its body a centered flex column,
+ * so a short content block — a fixed-height chart, a compact list — sits
+ * centered in its card's height instead of leaving the dead space at the
+ * bottom. Content taller than the card grows normally; centering only
+ * changes where a shorter block sits.
  */
 .mk-cell {
   display: flex;
@@ -406,6 +412,15 @@ body {
 
 .mk-cell > .mk-card {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mk-cell > .mk-card > .mk-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /*
@@ -573,14 +588,13 @@ a.mk-hn-list__title:hover {
 }
 
 /*
- * The histogram sits in a card that stretches to its row's tallest cell,
- * so bars are vertically centered rather than hugging the bottom — the
- * dead space above and below reads as part of the card, not as a chart
- * that fell out of its container.
+ * The histogram's bars sit on the container's bottom like a baseline; the
+ * container itself is vertically centered inside its card by the
+ * `.mk-cell > .mk-card > .mk-card__body` rules above.
  */
 .mk-hn-activity {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 2px;
   height: 6.5rem;
 }
