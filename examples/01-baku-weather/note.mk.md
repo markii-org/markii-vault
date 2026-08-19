@@ -81,7 +81,7 @@ Highs and lows for the next seven days:
 
 ::::cell
 :::card{title="Humidity"}
-::progress{data=baku_weather.humidity max=100 label="humidity"}
+::progress{data=baku_weather.humidity max=100 label=""}
 ::::
 
 :::::
