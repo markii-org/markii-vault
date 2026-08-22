@@ -257,7 +257,7 @@ export function App(): ReactElement {
       {!previewOnly && (
         <header className="playground__header">
           <div className="playground__header-text">
-            <h1>Mark II Vault</h1>
+            <h1>Markii Vault</h1>
             <p>{doc.description}</p>
           </div>
           {/*
@@ -271,7 +271,7 @@ export function App(): ReactElement {
             href="https://github.com/sadigaxund/markii-vault"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Mark II Vault on GitHub"
+            aria-label="Markii Vault on GitHub"
           >
             <GitHubMark />
             <span className="playground__repo-link-label">GitHub</span>

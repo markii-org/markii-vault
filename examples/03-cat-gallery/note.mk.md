@@ -67,21 +67,10 @@ local gallery = cache.get("cat-gallery", 600, function()
   if images == nil then
     error("Cat API: request failed")
   end
-  -- Top-level JSON arrays arrive as userdata: # and [i] work, but type()
-  -- would lie, so guard the length read with pcall.
-  local len_ok = pcall(function() return #images end)
-  if not len_ok then
-    error("Cat API: unexpected response shape")
-  end
   local cats = {}
   for i = 1, #images do
     local image = images[i]
     local breed = image.breeds and image.breeds[1] or nil
-    -- The API sets wikipedia_url to null for some breeds, and the
-    -- sandbox cannot convert a JSON null field — the plain read would
-    -- crash the whole run. pcall the synchronous read and degrade to
-    -- no link when it fails.
-    local ok, ok_wiki = pcall(function() return breed.wikipedia_url end)
     cats[#cats + 1] = {
       id = tostring(image.id or ""),
       url = tostring(image.url or ""),
@@ -90,7 +79,9 @@ local gallery = cache.get("cat-gallery", 600, function()
       breed = (breed ~= nil and tostring(breed.name)) or "",
       origin = (breed ~= nil and tostring(breed.origin)) or "",
       temperament = (breed ~= nil and tostring(breed.temperament)) or "",
-      wikipedia = (ok and ok_wiki ~= nil and tostring(ok_wiki)) or "",
+      -- The API sets wikipedia_url to null for some breeds; a JSON null
+      -- object field reads as plain Lua nil, so `or ""` covers it.
+      wikipedia = (breed ~= nil and breed.wikipedia_url) or "",
     }
   end
   if #cats == 0 then

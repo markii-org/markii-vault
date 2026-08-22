@@ -138,20 +138,17 @@ local compass = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" }
 local index = math.floor(((c.wind_direction_10m % 360) + 22.5) / 45) % 8
 local wind_dir = compass[index + 1]
 
-local function array_of(t)
-  local out = {}
-  local i = 1
-  local v = t[i]
-  while v ~= nil do
-    out[i] = v
-    i = i + 1
-    v = t[i]
-  end
-  return out
-end
+local week_highs = r.daily.temperature_2m_max
+local week_lows = r.daily.temperature_2m_min
 
-local week_highs = array_of(r.daily.temperature_2m_max)
-local week_lows = array_of(r.daily.temperature_2m_min)
+-- Open-Meteo can leave a day's high/low null (a station outage, a very
+-- short-range forecast edge), which arrives as `false` in this array
+-- position rather than a number — the chart needs a number, so treat a
+-- missing day as 0 instead of feeding `false` to it.
+for i = 1, #week_highs do
+  if week_highs[i] == false then week_highs[i] = 0 end
+  if week_lows[i] == false then week_lows[i] = 0 end
+end
 
 return {
   city = "Baku, Azerbaijan",
