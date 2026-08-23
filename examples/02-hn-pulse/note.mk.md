@@ -71,20 +71,28 @@ Where the front page's stories actually point, counted and weighted by points.
 
 ```lua {name=pulse}
 -- Two requests from the Algolia HN Search API, cached together for five
--- minutes:
---   1. the current front page: title, url, points, comments per story, and
---   2. the most recent ~1000 stories, which feed the hourly activity chart
---      and the "most discussed" list.
+-- minutes. Each request asks only for the fields the components below use
+-- (attributesToRetrieve) and turns highlighting off (attributesToHighlight),
+-- so a response stays well inside the sandbox's per-response node budget: a
+-- full 1000-story pool decodes to ~30k JSON nodes and is refused, while the
+-- trimmed 800-story pool below is ~6k.
+--   1. the current front page (50 stories): title, url, points, comments.
+--   2. the ~800 most recent stories, which feed the hourly activity chart
+--      (it bins timestamps into a 24-hour window, so 800 is ample).
 -- Comments per hour (velocity) needs a clock; the sandbox has none by
--- design (docs/security.md — no `os` in the curated standard library), so
+-- design (docs/security.md: no `os` in the curated standard library), so
 -- this script returns raw unix timestamps and the hn-* components compute
 -- age and velocity at render time with the host's clock.
 
+local FIELDS = "objectID,url,title,points,num_comments,created_at_i,created_at"
 local FRONT_URL = "https://hn.algolia.com/api/v1/search?"
   .. "tags=front_page&hitsPerPage=50"
+  .. "&attributesToRetrieve=" .. FIELDS
+  .. "&attributesToHighlight=%5B%5D"
 local POOL_URL = "https://hn.algolia.com/api/v1/search_by_date?"
-  .. "tags=%28story%2Cask_hn%2Cshow_hn%29"
-  .. "&hitsPerPage=1000&restrictSearchableAttributes=title"
+  .. "tags=%28story%2Cask_hn%2Cshow_hn%29&hitsPerPage=800"
+  .. "&attributesToRetrieve=" .. FIELDS
+  .. "&attributesToHighlight=%5B%5D"
 
 -- Words that say nothing about a topic. Front-page titles are tokenized
 -- and every non-stop word becomes a candidate "topic".
