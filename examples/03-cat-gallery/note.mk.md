@@ -59,11 +59,16 @@ The largest photo gets the spotlight.
 -- fills the 5×2 grid exactly — every tile named, no half-filled rows.
 -- The batch is cached under a single key for ten minutes.
 
-local API = "https://api.thecatapi.com/v1/images/search?limit=10&breed_ids="
-  .. "beng,sibe,pers,siam,mco,bsh,srex,abys,ragd,norw"
+-- The URL is written as ONE string literal, directly in the net call. The
+-- host reads it before running anything to know which hostname to ask you
+-- about, and it only trusts a whole literal: split it across a variable or
+-- a `..` concatenation and there is nothing to grant, so the request is
+-- denied. See docs/scripting.md.
 
 local gallery = cache.get("cat-gallery", 600, function()
-  local images = net.fetch_json(API)
+  local images = net.fetch_json(
+    "https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng,sibe,pers,siam,mco,bsh,srex,abys,ragd,norw"
+  )
   if images == nil then
     error("Cat API: request failed")
   end
