@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import type { MarkComponentProps } from '@markii/react';
 import { failureTitle, int, isUnreadable, safeExtract, stateClassName, str } from './guard';
+import './hn-topics.css';
 
 const MAX_EXTRACT = 100;
 const LEVEL_COUNT = 4;

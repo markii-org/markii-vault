@@ -1,0 +1,53 @@
+/*
+ * `::hn-topics` — a badge cloud. The pill mirrors the reference badge's
+ * default (non-semantic) treatment: `--mk-surface-strong` fill with
+ * `--mk-fg` text (`.mk-badge`'s own default, see @markii/react's doc.css).
+ */
+
+.mk-hn-topics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.mk-hn-topics__term {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--mk-surface-strong, #f0f0f2);
+  color: var(--mk-fg, #1a1a1a);
+  font-weight: 600;
+}
+
+.mk-hn-topics__term--1 {
+  font-size: 0.78rem;
+}
+
+.mk-hn-topics__term--2 {
+  font-size: 0.9rem;
+}
+
+.mk-hn-topics__term--3 {
+  font-size: 1.05rem;
+}
+
+.mk-hn-topics__term--4 {
+  font-size: 1.2rem;
+}
+
+.mk-hn-topics__count {
+  color: var(--mk-muted, #52525b);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-hn-topics--stale {
+  opacity: 0.7;
+}
+
+.mk-hn-topics--error {
+  opacity: 0.4;
+}

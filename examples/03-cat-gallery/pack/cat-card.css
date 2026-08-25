@@ -1,0 +1,85 @@
+/*
+ * `::cat-card` — a full-bleed photo hero with the profile scrimmed over
+ * the photo's lower edge. The frame follows the `.doc` palette
+ * (`--mk-border`/`--mk-surface`), but the scrim overlay and the text
+ * riding on it are deliberately NOT tokenized: they composite onto a
+ * photograph, not onto the document's own ground, so they must stay a
+ * fixed dark-scrim-with-light-text pair regardless of the host's theme.
+ * Mapping them to `--mk-fg`/`--mk-bg` would flip the scrim to a light
+ * wash and the text to dark in a dark host theme, making the caption
+ * unreadable over the photo — the opposite of this migration's goal. See
+ * the migration report for the full reasoning.
+ */
+
+.mk-cat-card {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--mk-border, #e4e4e7);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--mk-surface, #f4f4f5);
+}
+
+.mk-cat-card__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 30rem;
+  object-fit: cover;
+}
+
+/* The profile rides a scrim over the photo: no more label-vs-photo
+ * contest for the card's height — the photo is the card, and the text
+ * only borrows its lower edge. On the widest cells the whole overlay
+ * tucks into the bottom-left; it never caps the body's top. */
+.mk-cat-card__info {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 1.75rem 1rem 0.85rem;
+  /* Fixed dark scrim over the photo — not a theme-relative surface. See file header. */
+  background: linear-gradient(to top, rgba(9, 9, 11, 0.8), rgba(9, 9, 11, 0));
+  color: #fafafa;
+}
+
+.mk-cat-card__breed {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.mk-cat-card__meta {
+  color: #e4e4e7;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-cat-card__temperament {
+  margin: 0;
+  max-width: 100%;
+  color: #e4e4e7;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mk-cat-card__link {
+  color: #93c5fd;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.mk-cat-card__link:hover {
+  text-decoration: underline;
+}
+
+.mk-cat-card--stale {
+  opacity: 0.7;
+}
+
+.mk-cat-card--error {
+  opacity: 0.4;
+}

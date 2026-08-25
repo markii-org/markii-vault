@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import type { MarkComponentProps } from '@markii/react';
 import { failureTitle, int, isUnreadable, safeExtract, stateClassName, str } from './guard';
+import './hn-activity.css';
 
 const MAX_EXTRACT = 1000;
 const DEFAULT_HOURS = 24;

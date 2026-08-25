@@ -1,0 +1,146 @@
+/*
+ * `::cat-finder` — an interactive breed browser. The chip row, profile
+ * strip, and photo wall follow the `.doc` palette: `--mk-border` for
+ * hairlines, `--mk-raised` for the chip/profile surfaces (raised controls,
+ * distinct from the page ground), `--mk-muted`/`--mk-fg` for text, and
+ * `--mk-accent` for the active/interactive state.
+ *
+ * The active chip's text and its count badge sit on a SOLID `--mk-accent`
+ * fill rather than a tinted one, so they use `--mk-on-accent`: the one
+ * palette token a host must supply directly, because ink that reads against
+ * a solid accent depends on that accent's own lightness and cannot be
+ * derived from the page palette.
+ */
+
+.mk-cat-finder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mk-cat-finder__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.mk-cat-finder__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--mk-border, #e4e4e7);
+  border-radius: 999px;
+  background: var(--mk-raised, #fff);
+  color: var(--mk-muted, #52525b);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.mk-cat-finder__chip:hover {
+  border-color: var(--mk-muted, #52525b);
+}
+
+.mk-cat-finder__chip--active {
+  background: var(--mk-accent, #3b82f6);
+  border-color: var(--mk-accent, #3b82f6);
+  /* On-solid-accent text; see file header. */
+  color: var(--mk-on-accent, #fff);
+}
+
+.mk-cat-finder__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--mk-shadow-sm, rgba(0, 0, 0, 0.05));
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-cat-finder__chip--active .mk-cat-finder__count {
+  /* On-solid-accent fill; see file header. */
+  background: color-mix(in srgb, var(--mk-on-accent, #fff) 22%, transparent);
+}
+
+.mk-cat-finder__profile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--mk-border, #e4e4e7);
+  border-radius: 8px;
+  background: var(--mk-raised, #fff);
+}
+
+.mk-cat-finder__origin {
+  color: var(--mk-muted, #52525b);
+  font-size: 0.85rem;
+}
+
+.mk-cat-finder__temperament {
+  margin: 0;
+  color: var(--mk-fg, #1a1a1a);
+  font-size: 0.9rem;
+}
+
+.mk-cat-finder__link {
+  align-self: flex-start;
+  color: var(--mk-accent, #3b82f6);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.mk-cat-finder__link:hover {
+  text-decoration: underline;
+}
+
+.mk-cat-finder__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (max-width: 46rem) {
+  .mk-cat-finder__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.mk-cat-figure {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border: 1px solid var(--mk-border, #e4e4e7);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--mk-surface, #f4f4f5);
+}
+
+.mk-cat-figure__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.mk-cat-figure__caption {
+  padding: 0.35rem 0.6rem 0.45rem;
+  color: var(--mk-muted, #52525b);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mk-cat-finder--stale {
+  opacity: 0.7;
+}
+
+.mk-cat-finder--error {
+  opacity: 0.4;
+}

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
 import type { MarkComponentProps } from '@markii/react';
 import { failureTitle, int, isUnreadable, safeExtract, stateClassName, str } from './guard';
+import './cat-finder.css';
 
 const MAX_EXTRACT = 30;
 

@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import type { MarkComponentProps } from '@markii/react';
 import { failureTitle, int, isUnreadable, safeExtract, stateClassName, str } from './guard';
+import './cat-card.css';
 
 interface FeaturedCat {
   url: string;

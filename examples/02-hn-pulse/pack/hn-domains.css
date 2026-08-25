@@ -1,0 +1,57 @@
+/*
+ * `::hn-domains` — a horizontal bar leaderboard. `--mk-surface-strong`
+ * gives the empty track a fill one step off the ground (matching the
+ * `.doc` progress track's own idiom); the bar itself uses `--mk-accent`,
+ * the document's single interactive color.
+ */
+
+.mk-hn-domains {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.mk-hn-domains__row {
+  display: grid;
+  grid-template-columns: minmax(5rem, 9rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+}
+
+.mk-hn-domains__name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mk-hn-domains__track {
+  height: 0.55rem;
+  border-radius: 3px;
+  background: var(--mk-surface-strong, #f0f0f2);
+  overflow: hidden;
+}
+
+.mk-hn-domains__bar {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--mk-accent, #3b82f6);
+}
+
+.mk-hn-domains__value {
+  color: var(--mk-muted, #52525b);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.mk-hn-domains--stale {
+  opacity: 0.7;
+}
+
+.mk-hn-domains--error {
+  opacity: 0.4;
+}
