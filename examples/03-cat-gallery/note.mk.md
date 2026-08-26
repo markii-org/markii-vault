@@ -43,9 +43,9 @@ The largest photo gets the spotlight.
 ::cat-card{data=cats.featured}
 
 :::details{title="About this note"}
-- Fed by the Cat API (`api.thecatapi.com/v1/images/search` with a comma-separated `breed_ids`), one request per run, the batch cached for 10 minutes under a single key.
+- Fed by the Cat API (`api.thecatapi.com/v1/images/search`), one request per run, fetched fresh every time: pressing Run always brings a new batch of ten. (The weather and HN Pulse examples are the ones that demonstrate `cache.get`.)
 
-- Ten curated breeds fill the 5×2 wall exactly: the API returns only photos of those breeds, each carrying its breed data. A failed request aborts the run with a clear error instead of a half-filled wall.
+- Breed data needs an API key. Without one the API ignores `breed_ids` and returns anonymous photos, so every cat files under "Mystery cat" and the finder has no origin or temperament to show. A key is free at thecatapi.com: paste it into the URL in the script below (the commented line shows where), keeping the URL one single literal so the host can still read the hostname for the network grant.
 
 - The `cat` pack ships `::cat-gallery`, `::cat-card`, and the interactive `::cat-finder`, all data-bound like the stdlib components.
 :::
@@ -53,11 +53,13 @@ The largest photo gets the spotlight.
 ---
 
 ```lua {name=cats}
--- Ten curated breeds asked for in ONE request: a comma-separated
--- breed_ids makes the Cat API attach full breed data (name, origin,
--- temperament, wikipedia link) to each photo it returns. `limit=10`
--- fills the 5×2 grid exactly — every tile named, no half-filled rows.
--- The batch is cached under a single key for ten minutes.
+-- One request, ten photos, fetched fresh on every run: the fun of this
+-- note IS pressing Run and meeting ten new cats, so nothing is cached
+-- here (the weather and HN Pulse examples demonstrate cache.get).
+-- With an API key, the comma-separated breed_ids makes the Cat API
+-- attach full breed data (name, origin, temperament, wikipedia link) to
+-- each photo. Without one the API ignores the filter and sends anonymous
+-- photos, and the wall still fills; the cats just keep their secrets.
 
 -- The URL is written as ONE string literal, directly in the net call. The
 -- host reads it before running anything to know which hostname to ask you
@@ -65,35 +67,35 @@ The largest photo gets the spotlight.
 -- a `..` concatenation and there is nothing to grant, so the request is
 -- denied. See docs/scripting.md.
 
-local gallery = cache.get("cat-gallery", 600, function()
-  local images = net.fetch_json(
-    "https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng,sibe,pers,siam,mco,bsh,srex,abys,ragd,norw"
-  )
-  if images == nil then
-    error("Cat API: request failed")
-  end
-  local cats = {}
-  for i = 1, #images do
-    local image = images[i]
-    local breed = image.breeds and image.breeds[1] or nil
-    cats[#cats + 1] = {
-      id = tostring(image.id or ""),
-      url = tostring(image.url or ""),
-      width = image.width or 0,
-      height = image.height or 0,
-      breed = (breed ~= nil and tostring(breed.name)) or "",
-      origin = (breed ~= nil and tostring(breed.origin)) or "",
-      temperament = (breed ~= nil and tostring(breed.temperament)) or "",
-      -- The API sets wikipedia_url to null for some breeds; a JSON null
-      -- object field reads as plain Lua nil, so `or ""` covers it.
-      wikipedia = (breed ~= nil and breed.wikipedia_url) or "",
-    }
-  end
-  if #cats == 0 then
-    error("Cat API: no breed photos returned")
-  end
-  return cats
-end)
+-- Breed data needs a (free) API key: append &api_key=YOUR_KEY inside
+-- the SAME string literal below. Kept as one literal on purpose; see
+-- the note above on why a concatenated URL cannot be granted.
+local images = net.fetch_json(
+  "https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=beng,sibe,pers,siam,mco,bsh,srex,abys,ragd,norw"
+)
+if images == nil then
+  error("Cat API: request failed")
+end
+local gallery = {}
+for i = 1, #images do
+  local image = images[i]
+  local breed = image.breeds and image.breeds[1] or nil
+  gallery[#gallery + 1] = {
+    id = tostring(image.id or ""),
+    url = tostring(image.url or ""),
+    width = image.width or 0,
+    height = image.height or 0,
+    breed = (breed ~= nil and tostring(breed.name)) or "",
+    origin = (breed ~= nil and tostring(breed.origin)) or "",
+    temperament = (breed ~= nil and tostring(breed.temperament)) or "",
+    -- The API sets wikipedia_url to null for some breeds; a JSON null
+    -- object field reads as plain Lua nil, so `or ""` covers it.
+    wikipedia = (breed ~= nil and breed.wikipedia_url) or "",
+  }
+end
+if #gallery == 0 then
+  error("Cat API: no photos returned")
+end
 
 local breed_set = {}
 for i = 1, #gallery do

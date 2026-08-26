@@ -141,12 +141,20 @@ export function CatFinder({
 
           {active !== undefined && (
             <div className="mk-cat-finder__profile">
-              {active.origin !== '' && (
-                <span className="mk-cat-finder__origin">
-                  {active.origin} · {active.photos.length}{' '}
-                  {active.photos.length === 1 ? 'photo' : 'photos'}
-                </span>
-              )}
+              <span className="mk-cat-finder__origin">
+                {active.origin !== '' ? `${active.origin} · ` : ''}
+                {active.photos.length}{' '}
+                {active.photos.length === 1 ? 'photo' : 'photos'}
+              </span>
+              {active.origin === '' &&
+                active.temperament === '' &&
+                active.wikipedia === undefined && (
+                  <p className="mk-cat-finder__temperament">
+                    No breed details for these photos: the Cat API only
+                    attaches breed data when the request carries an API key
+                    (free at thecatapi.com). See the note's script.
+                  </p>
+                )}
               {active.temperament !== '' && (
                 <p className="mk-cat-finder__temperament">{active.temperament}</p>
               )}
