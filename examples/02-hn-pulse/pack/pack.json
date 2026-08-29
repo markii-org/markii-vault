@@ -2,9 +2,25 @@
   "name": "hn",
   "engine": "react",
   "components": {
-    "list": "./hn-list.tsx",
-    "domains": "./hn-domains.tsx",
-    "topics": "./hn-topics.tsx",
-    "activity": "./hn-activity.tsx"
+    "list": {
+      "source": "./hn-list.tsx",
+      "description": "Ranked story leaderboard sortable by points, comments, or velocity",
+      "kind": "leaf"
+    },
+    "domains": {
+      "source": "./hn-domains.tsx",
+      "description": "Horizontal bar leaderboard of the domains front-page stories link to",
+      "kind": "leaf"
+    },
+    "topics": {
+      "source": "./hn-topics.tsx",
+      "description": "Badge cloud of recurring terms from front-page titles, sized by count",
+      "kind": "leaf"
+    },
+    "activity": {
+      "source": "./hn-activity.tsx",
+      "description": "Hourly histogram of thread creation over a trailing window",
+      "kind": "leaf"
+    }
   }
 }

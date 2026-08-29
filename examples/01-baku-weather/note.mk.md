@@ -143,7 +143,7 @@ local week_lows = r.daily.temperature_2m_min
 
 -- Open-Meteo can leave a day's high/low null (a station outage, a very
 -- short-range forecast edge), which arrives as `false` in this array
--- position rather than a number — the chart needs a number, so treat a
+-- position rather than a number. The chart needs a number, so treat a
 -- missing day as 0 instead of feeding `false` to it.
 for i = 1, #week_highs do
   if week_highs[i] == false then week_highs[i] = 0 end

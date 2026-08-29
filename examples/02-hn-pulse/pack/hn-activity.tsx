@@ -30,7 +30,7 @@ function extractTimestamps(data: unknown): number[] {
 }
 
 /**
- * `::hn-activity{data=... hours=24}` — an hourly histogram of threads
+ * `::hn_activity{data=... hours=24}` — an hourly histogram of threads
  * started, bound to an array of story objects (or raw unix seconds). The
  * sandbox has no clock, so the "last N hours" window is drawn here in host
  * JS (docs/scripting.md — presentation is the component's business):
@@ -79,7 +79,7 @@ export function HnActivity({
       bars.push(
         <span
           key={bucket}
-          className="mk-hn-activity__bar"
+          className="mk-hn_activity__bar"
           style={{ height }}
           title={`${at.toLocaleTimeString([], {
             hour: '2-digit',
@@ -98,7 +98,7 @@ export function HnActivity({
 
   return (
     <div
-      className={stateClassName('mk-hn-activity', dataStatus)}
+      className={stateClassName('mk-hn_activity', dataStatus)}
       title={failureTitle(dataError, bound.fault)}
       role="img"
       aria-label={summary}

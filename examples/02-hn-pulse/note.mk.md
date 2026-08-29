@@ -1,6 +1,6 @@
 ---
 title: Tech Community Pulse
-description: A live pulse dashboard for Hacker News — trending threads, top domains, and comment velocity, fed by the Algolia HN Search API.
+description: A live pulse dashboard for Hacker News: trending threads, top domains, and comment velocity, fed by the Algolia HN Search API.
 uses: [hn]
 ---
 
@@ -41,11 +41,11 @@ The current front page, ranked two ways: by points, and by how fast each thread'
 ::::row{cols=2}
 
 :::card{title="Top Threads"}
-::hn-list{data=pulse.front max=6}
+::hn_list{data=pulse.front max=6}
 :::
 
 :::card{title="Trending Threads"}
-::hn-list{data=pulse.front by=velocity max=5}
+::hn_list{data=pulse.front by=velocity max=5}
 :::
 
 ::::
@@ -56,14 +56,14 @@ Where the front page's stories actually point, counted and weighted by points.
 
 ::::cell
 :::right
-::hn-topics{data=pulse.topics max=10}
+::hn_topics{data=pulse.topics max=10}
 :::
 ::::
 
-::hn-domains{data=pulse.domains max=6}
+::hn_domains{data=pulse.domains max=6}
 
 :::card{title="Threads / per hour"}
-::hn-activity{data=pulse.pool}
+::hn_activity{data=pulse.pool}
 :::
 
 
@@ -81,7 +81,7 @@ Where the front page's stories actually point, counted and weighted by points.
 --      (it bins timestamps into a 24-hour window, so 800 is ample).
 -- Comments per hour (velocity) needs a clock; the sandbox has none by
 -- design (docs/security.md: no `os` in the curated standard library), so
--- this script returns raw unix timestamps and the hn-* components compute
+-- this script returns raw unix timestamps and the hn_* components compute
 -- age and velocity at render time with the host's clock.
 
 local FIELDS = "objectID,url,title,points,num_comments,created_at_i,created_at"

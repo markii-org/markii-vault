@@ -34,7 +34,7 @@ function extractDomains(data: unknown): DomainRow[] {
 }
 
 /**
- * `::hn-domains{data=... max=6 value=count}` — a horizontal bar
+ * `::hn_domains{data=... max=6 value=count}` — a horizontal bar
  * leaderboard of domains bound to an array of {domain, count, points}.
  * Bars are scaled to the `value=` key (`count` by default, or `points`)
  * of the top row; each row shows the domain, its bar, and "count · points
@@ -66,19 +66,19 @@ export function HnDomains({
 
   return (
     <ol
-      className={stateClassName('mk-hn-domains', dataStatus)}
+      className={stateClassName('mk-hn_domains', dataStatus)}
       title={failureTitle(dataError, bound.fault)}
     >
       {rows.map((row, index) => (
-        <li key={index} className="mk-hn-domains__row">
-          <span className="mk-hn-domains__name">{row.domain}</span>
-          <span className="mk-hn-domains__track">
+        <li key={index} className="mk-hn_domains__row">
+          <span className="mk-hn_domains__name">{row.domain}</span>
+          <span className="mk-hn_domains__track">
             <span
-              className="mk-hn-domains__bar"
+              className="mk-hn_domains__bar"
               style={{ width: `${Math.round((row[valueKey] / scale) * 100)}%` }}
             />
           </span>
-          <span className="mk-hn-domains__value">
+          <span className="mk-hn_domains__value">
             {row.count} · {row.points} pts
           </span>
         </li>

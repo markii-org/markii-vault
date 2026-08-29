@@ -2,7 +2,15 @@
   "name": "cat",
   "engine": "react",
   "components": {
-    "card": "./cat-card.tsx",
-    "finder": "./cat-finder.tsx"
+    "card": {
+      "source": "./cat-card.tsx",
+      "description": "Full-bleed photo hero for one featured cat, with breed, origin, temperament, and a Wikipedia link scrimmed over the photo.",
+      "kind": "leaf"
+    },
+    "finder": {
+      "source": "./cat-finder.tsx",
+      "description": "Interactive breed chip row that filters a photo wall and shows a profile strip for the picked breed.",
+      "kind": "leaf"
+    }
   }
 }

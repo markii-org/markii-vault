@@ -1,5 +1,5 @@
 /*
- * `::cat-card` — a full-bleed photo hero with the profile scrimmed over
+ * `::cat_card` — a full-bleed photo hero with the profile scrimmed over
  * the photo's lower edge. The frame follows the `.doc` palette
  * (`--mk-border`/`--mk-surface`), but the scrim overlay and the text
  * riding on it are deliberately NOT tokenized: they composite onto a
@@ -11,7 +11,7 @@
  * the migration report for the full reasoning.
  */
 
-.mk-cat-card {
+.mk-cat_card {
   position: relative;
   margin: 0;
   border: 1px solid var(--mk-border, #e4e4e7);
@@ -20,7 +20,7 @@
   background: var(--mk-surface, #f4f4f5);
 }
 
-.mk-cat-card__photo {
+.mk-cat_card__photo {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -32,7 +32,7 @@
  * contest for the card's height — the photo is the card, and the text
  * only borrows its lower edge. On the widest cells the whole overlay
  * tucks into the bottom-left; it never caps the body's top. */
-.mk-cat-card__info {
+.mk-cat_card__info {
   position: absolute;
   inset: auto 0 0 0;
   display: flex;
@@ -45,18 +45,18 @@
   color: #fafafa;
 }
 
-.mk-cat-card__breed {
+.mk-cat_card__breed {
   font-weight: 700;
   font-size: 1.15rem;
 }
 
-.mk-cat-card__meta {
+.mk-cat_card__meta {
   color: #e4e4e7;
   font-size: 0.85rem;
   font-variant-numeric: tabular-nums;
 }
 
-.mk-cat-card__temperament {
+.mk-cat_card__temperament {
   margin: 0;
   max-width: 100%;
   color: #e4e4e7;
@@ -66,20 +66,20 @@
   text-overflow: ellipsis;
 }
 
-.mk-cat-card__link {
+.mk-cat_card__link {
   color: #93c5fd;
   font-size: 0.85rem;
   text-decoration: none;
 }
 
-.mk-cat-card__link:hover {
+.mk-cat_card__link:hover {
   text-decoration: underline;
 }
 
-.mk-cat-card--stale {
+.mk-cat_card--stale {
   opacity: 0.7;
 }
 
-.mk-cat-card--error {
+.mk-cat_card--error {
   opacity: 0.4;
 }

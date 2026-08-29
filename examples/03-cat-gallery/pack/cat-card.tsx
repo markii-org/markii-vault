@@ -39,7 +39,7 @@ function extractCat(data: unknown): FeaturedCat | undefined {
 }
 
 /**
- * `::cat-card{data=...}` — a featured-photo hero for a single cat bound to
+ * `::cat_card{data=...}` — a featured-photo hero for a single cat bound to
  * {url, breed, origin, temperament, wikipedia, width, height}. The photo
  * fills the whole card; its profile — breed, origin and dimensions,
  * temperament, a Wikipedia link when the API provided one — sits in a
@@ -60,23 +60,23 @@ export function CatCard({
 
   return (
     <figure
-      className={stateClassName('mk-cat-card', dataStatus)}
+      className={stateClassName('mk-cat_card', dataStatus)}
       title={failureTitle(dataError, bound.fault)}
     >
       {cat !== undefined && (
         <>
           <img
-            className="mk-cat-card__photo"
+            className="mk-cat_card__photo"
             src={cat.url}
             alt={cat.breed || 'cat photo'}
             loading="lazy"
           />
-          <figcaption className="mk-cat-card__info">
-            <span className="mk-cat-card__breed">
+          <figcaption className="mk-cat_card__info">
+            <span className="mk-cat_card__breed">
               {cat.breed || 'Mystery cat'}
             </span>
             {(cat.origin !== '' || cat.width > 0) && (
-              <span className="mk-cat-card__meta">
+              <span className="mk-cat_card__meta">
                 {cat.origin !== '' ? `${cat.origin} · ` : ''}
                 {cat.width > 0 && cat.height > 0
                   ? `${cat.width}×${cat.height} px`
@@ -84,11 +84,11 @@ export function CatCard({
               </span>
             )}
             {cat.temperament !== '' && (
-              <p className="mk-cat-card__temperament">{cat.temperament}</p>
+              <p className="mk-cat_card__temperament">{cat.temperament}</p>
             )}
             {cat.wikipedia !== undefined && (
               <a
-                className="mk-cat-card__link"
+                className="mk-cat_card__link"
                 href={cat.wikipedia}
                 target="_blank"
                 rel="noopener noreferrer"

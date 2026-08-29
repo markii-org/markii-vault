@@ -90,7 +90,7 @@ function sortRows(rows: Row[], key: SortKey, nowSec: number): Row[] {
 }
 
 /**
- * `::hn-list{data=... max=8 by=velocity}` — a ranked leaderboard of
+ * `::hn_list{data=... max=8 by=velocity}` — a ranked leaderboard of
  * Hacker News stories bound to an array of story objects ({title, url,
  * domain, points, comments, created_at_i}). Rows are sorted by the `by=`
  * key — `points` (default), `comments`, or `velocity` (comments per hour
@@ -125,16 +125,16 @@ export function HnList({
 
   return (
     <ol
-      className={stateClassName('mk-hn-list', dataStatus)}
+      className={stateClassName('mk-hn_list', dataStatus)}
       title={failureTitle(dataError, bound.fault)}
     >
       {rows.map((row, index) => (
-        <li key={index} className="mk-hn-list__row">
-          <span className="mk-hn-list__rank">{index + 1}</span>
-          <span className="mk-hn-list__titles">
+        <li key={index} className="mk-hn_list__row">
+          <span className="mk-hn_list__rank">{index + 1}</span>
+          <span className="mk-hn_list__titles">
             {row.href !== undefined ? (
               <a
-                className="mk-hn-list__title"
+                className="mk-hn_list__title"
                 href={row.href}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -142,11 +142,11 @@ export function HnList({
                 {row.title}
               </a>
             ) : (
-              <span className="mk-hn-list__title">{row.title}</span>
+              <span className="mk-hn_list__title">{row.title}</span>
             )}
-            <span className="mk-hn-list__domain">{row.domain}</span>
+            <span className="mk-hn_list__domain">{row.domain}</span>
           </span>
-          <span className="mk-hn-list__meta">
+          <span className="mk-hn_list__meta">
             {row.points} pts · {row.comments} comments
             {showVelocity
               ? ` · ${velocity(row.createdAt, row.comments, nowSec).toFixed(1)}/hr`

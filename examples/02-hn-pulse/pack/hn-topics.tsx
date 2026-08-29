@@ -28,7 +28,7 @@ function extractTopics(data: unknown): TopicRow[] {
 }
 
 /**
- * `::hn-topics{data=... max=10}` — a badge cloud of recurring terms bound
+ * `::hn_topics{data=... max=10}` — a badge cloud of recurring terms bound
  * to an array of {term, count}, sorted by count (verifiably by term on
  * ties). The top quartile of the rendered rows gets the largest badge
  * size down to the smallest; the count rides along under each term.
@@ -53,7 +53,7 @@ export function HnTopics({
 
   return (
     <div
-      className={stateClassName('mk-hn-topics', dataStatus)}
+      className={stateClassName('mk-hn_topics', dataStatus)}
       title={failureTitle(dataError, bound.fault)}
     >
       {rows.map((row, index) => {
@@ -63,10 +63,10 @@ export function HnTopics({
         return (
           <span
             key={index}
-            className={`mk-hn-topics__term mk-hn-topics__term--${level}`}
+            className={`mk-hn_topics__term mk-hn_topics__term--${level}`}
           >
             {row.term}
-            <span className="mk-hn-topics__count">{row.count}</span>
+            <span className="mk-hn_topics__count">{row.count}</span>
           </span>
         );
       })}

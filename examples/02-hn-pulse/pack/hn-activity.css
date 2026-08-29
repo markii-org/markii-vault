@@ -1,27 +1,27 @@
 /*
- * `::hn-activity` — an hourly histogram. Bars use `--mk-accent`, the
+ * `::hn_activity` — an hourly histogram. Bars use `--mk-accent`, the
  * document's single interactive color, matching the domain leaderboard's
  * bar.
  */
 
-.mk-hn-activity {
+.mk-hn_activity {
   display: flex;
   align-items: flex-end;
   gap: 2px;
   height: 6.5rem;
 }
 
-.mk-hn-activity__bar {
+.mk-hn_activity__bar {
   flex: 1;
   min-width: 0;
   border-radius: 2px 2px 0 0;
   background: var(--mk-accent, #3b82f6);
 }
 
-.mk-hn-activity--stale {
+.mk-hn_activity--stale {
   opacity: 0.7;
 }
 
-.mk-hn-activity--error {
+.mk-hn_activity--error {
   opacity: 0.4;
 }

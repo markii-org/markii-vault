@@ -1,5 +1,5 @@
 /*
- * `::cat-finder` — an interactive breed browser. The chip row, profile
+ * `::cat_finder` — an interactive breed browser. The chip row, profile
  * strip, and photo wall follow the `.doc` palette: `--mk-border` for
  * hairlines, `--mk-raised` for the chip/profile surfaces (raised controls,
  * distinct from the page ground), `--mk-muted`/`--mk-fg` for text, and
@@ -12,19 +12,19 @@
  * derived from the page palette.
  */
 
-.mk-cat-finder {
+.mk-cat_finder {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.mk-cat-finder__chips {
+.mk-cat_finder__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
 
-.mk-cat-finder__chip {
+.mk-cat_finder__chip {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -38,18 +38,18 @@
   cursor: pointer;
 }
 
-.mk-cat-finder__chip:hover {
+.mk-cat_finder__chip:hover {
   border-color: var(--mk-muted, #52525b);
 }
 
-.mk-cat-finder__chip--active {
+.mk-cat_finder__chip--active {
   background: var(--mk-accent, #3b82f6);
   border-color: var(--mk-accent, #3b82f6);
   /* On-solid-accent text; see file header. */
   color: var(--mk-on-accent, #fff);
 }
 
-.mk-cat-finder__count {
+.mk-cat_finder__count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -62,12 +62,12 @@
   font-variant-numeric: tabular-nums;
 }
 
-.mk-cat-finder__chip--active .mk-cat-finder__count {
+.mk-cat_finder__chip--active .mk-cat_finder__count {
   /* On-solid-accent fill; see file header. */
   background: color-mix(in srgb, var(--mk-on-accent, #fff) 22%, transparent);
 }
 
-.mk-cat-finder__profile {
+.mk-cat_finder__profile {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -77,41 +77,41 @@
   background: var(--mk-raised, #fff);
 }
 
-.mk-cat-finder__origin {
+.mk-cat_finder__origin {
   color: var(--mk-muted, #52525b);
   font-size: 0.85rem;
 }
 
-.mk-cat-finder__temperament {
+.mk-cat_finder__temperament {
   margin: 0;
   color: var(--mk-fg, #1a1a1a);
   font-size: 0.9rem;
 }
 
-.mk-cat-finder__link {
+.mk-cat_finder__link {
   align-self: flex-start;
   color: var(--mk-accent, #3b82f6);
   font-size: 0.85rem;
   text-decoration: none;
 }
 
-.mk-cat-finder__link:hover {
+.mk-cat_finder__link:hover {
   text-decoration: underline;
 }
 
-.mk-cat-finder__grid {
+.mk-cat_finder__grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
 @media (max-width: 46rem) {
-  .mk-cat-finder__grid {
+  .mk-cat_finder__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.mk-cat-figure {
+.mk-cat_figure {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -121,14 +121,14 @@
   background: var(--mk-surface, #f4f4f5);
 }
 
-.mk-cat-figure__photo {
+.mk-cat_figure__photo {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
 }
 
-.mk-cat-figure__caption {
+.mk-cat_figure__caption {
   padding: 0.35rem 0.6rem 0.45rem;
   color: var(--mk-muted, #52525b);
   font-size: 0.78rem;
@@ -137,10 +137,10 @@
   text-overflow: ellipsis;
 }
 
-.mk-cat-finder--stale {
+.mk-cat_finder--stale {
   opacity: 0.7;
 }
 
-.mk-cat-finder--error {
+.mk-cat_finder--error {
   opacity: 0.4;
 }

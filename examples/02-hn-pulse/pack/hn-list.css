@@ -1,5 +1,5 @@
 /*
- * `::hn-list` — a ranked story leaderboard. Colors are drawn from the
+ * `::hn_list` — a ranked story leaderboard. Colors are drawn from the
  * `.doc` palette (docs/integration.md "Theming a host"): hairlines use
  * `--mk-border`, secondary text uses `--mk-muted`/`--mk-faint`, and the
  * domain chip mirrors the reference badge's surface + border pair, so the
@@ -7,13 +7,13 @@
  * light-mode values it shipped with before.
  */
 
-.mk-hn-list {
+.mk-hn_list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.mk-hn-list__row {
+.mk-hn_list__row {
   display: grid;
   grid-template-columns: 1.75rem minmax(0, 1fr);
   grid-template-areas:
@@ -25,11 +25,11 @@
   border-top: 1px solid var(--mk-border, #e4e4e7);
 }
 
-.mk-hn-list__row:first-child {
+.mk-hn_list__row:first-child {
   border-top: none;
 }
 
-.mk-hn-list__rank {
+.mk-hn_list__rank {
   grid-area: rank;
   justify-self: end;
   color: var(--mk-faint, #94a3b8);
@@ -37,7 +37,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-.mk-hn-list__titles {
+.mk-hn_list__titles {
   grid-area: titles;
   display: flex;
   align-items: baseline;
@@ -46,21 +46,21 @@
   min-width: 0;
 }
 
-.mk-hn-list__title {
+.mk-hn_list__title {
   font-weight: 500;
   overflow-wrap: anywhere;
 }
 
-a.mk-hn-list__title {
+a.mk-hn_list__title {
   color: var(--mk-fg, #1a1a1a);
   text-decoration: none;
 }
 
-a.mk-hn-list__title:hover {
+a.mk-hn_list__title:hover {
   text-decoration: underline;
 }
 
-.mk-hn-list__domain {
+.mk-hn_list__domain {
   padding: 0 0.4rem;
   border: 1px solid var(--mk-border, #e4e4e7);
   border-radius: 999px;
@@ -70,17 +70,17 @@ a.mk-hn-list__title:hover {
   white-space: nowrap;
 }
 
-.mk-hn-list__meta {
+.mk-hn_list__meta {
   grid-area: meta;
   color: var(--mk-muted, #52525b);
   font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
 }
 
-.mk-hn-list--stale {
+.mk-hn_list--stale {
   opacity: 0.7;
 }
 
-.mk-hn-list--error {
+.mk-hn_list--error {
   opacity: 0.4;
 }

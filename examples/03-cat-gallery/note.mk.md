@@ -34,20 +34,20 @@ Every run of the script below pulls ten photos from the Cat API.
 ## Meet the breeds
 
 
-::cat-finder{data=cats.gallery}
+::cat_finder{data=cats.gallery}
 
 ## Featured cat
 
 The largest photo gets the spotlight.
 
-::cat-card{data=cats.featured}
+::cat_card{data=cats.featured}
 
 :::details{title="About this note"}
 - Fed by the Cat API (`api.thecatapi.com/v1/images/search`), one request per run, fetched fresh every time: pressing Run always brings a new batch of ten. (The weather and HN Pulse examples are the ones that demonstrate `cache.get`.)
 
 - Breed data needs an API key. Without one the API ignores `breed_ids` and returns anonymous photos, so every cat files under "Mystery cat" and the finder has no origin or temperament to show. A key is free at thecatapi.com: paste it into the URL in the script below (the commented line shows where), keeping the URL one single literal so the host can still read the hostname for the network grant.
 
-- The `cat` pack ships `::cat-gallery`, `::cat-card`, and the interactive `::cat-finder`, all data-bound like the stdlib components.
+- The `cat` pack ships `::cat_card` and the interactive `::cat_finder`, both data-bound like the stdlib components.
 :::
 
 ---

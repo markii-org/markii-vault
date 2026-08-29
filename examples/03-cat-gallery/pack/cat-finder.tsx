@@ -83,7 +83,7 @@ function buildMeets(photos: Photo[]): Meet[] {
 }
 
 /**
- * `::cat-finder{data=...}` — an interactive breed browser bound to the
+ * `::cat_finder{data=...}` — an interactive breed browser bound to the
  * photo array the note's script produces. A chip row shows every breed
  * present in the data; picking one narrows the wall below to that breed's
  * photos and opens a profile strip (origin, temperament, Wikipedia link).
@@ -111,14 +111,14 @@ export function CatFinder({
 
   return (
     <div
-      className={stateClassName('mk-cat-finder', dataStatus)}
+      className={stateClassName('mk-cat_finder', dataStatus)}
       title={failureTitle(dataError, bound.fault)}
     >
       {meets.length > 0 && (
         <>
-          <div className="mk-cat-finder__chips" role="group" aria-label="Filter by breed">
+          <div className="mk-cat_finder__chips" role="group" aria-label="Filter by breed">
             <button
-              className={`mk-cat-finder__chip${pick === '' ? ' mk-cat-finder__chip--active' : ''}`}
+              className={`mk-cat_finder__chip${pick === '' ? ' mk-cat_finder__chip--active' : ''}`}
               type="button"
               aria-pressed={pick === ''}
               onClick={() => setPick('')}
@@ -128,20 +128,20 @@ export function CatFinder({
             {meets.map((meet) => (
               <button
                 key={meet.breed}
-                className={`mk-cat-finder__chip${pick === meet.breed ? ' mk-cat-finder__chip--active' : ''}`}
+                className={`mk-cat_finder__chip${pick === meet.breed ? ' mk-cat_finder__chip--active' : ''}`}
                 type="button"
                 aria-pressed={pick === meet.breed}
                 onClick={() => setPick(meet.breed)}
               >
                 {meet.breed}
-                <span className="mk-cat-finder__count">{meet.photos.length}</span>
+                <span className="mk-cat_finder__count">{meet.photos.length}</span>
               </button>
             ))}
           </div>
 
           {active !== undefined && (
-            <div className="mk-cat-finder__profile">
-              <span className="mk-cat-finder__origin">
+            <div className="mk-cat_finder__profile">
+              <span className="mk-cat_finder__origin">
                 {active.origin !== '' ? `${active.origin} · ` : ''}
                 {active.photos.length}{' '}
                 {active.photos.length === 1 ? 'photo' : 'photos'}
@@ -149,18 +149,18 @@ export function CatFinder({
               {active.origin === '' &&
                 active.temperament === '' &&
                 active.wikipedia === undefined && (
-                  <p className="mk-cat-finder__temperament">
+                  <p className="mk-cat_finder__temperament">
                     No breed details for these photos: the Cat API only
                     attaches breed data when the request carries an API key
                     (free at thecatapi.com). See the note's script.
                   </p>
                 )}
               {active.temperament !== '' && (
-                <p className="mk-cat-finder__temperament">{active.temperament}</p>
+                <p className="mk-cat_finder__temperament">{active.temperament}</p>
               )}
               {active.wikipedia !== undefined && (
                 <a
-                  className="mk-cat-finder__link"
+                  className="mk-cat_finder__link"
                   href={active.wikipedia}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -171,16 +171,16 @@ export function CatFinder({
             </div>
           )}
 
-          <div className="mk-cat-finder__grid">
+          <div className="mk-cat_finder__grid">
             {shown.map((photo, index) => (
-              <figure key={`${photo.breed}-${index}`} className="mk-cat-figure">
+              <figure key={`${photo.breed}-${index}`} className="mk-cat_figure">
                 <img
-                  className="mk-cat-figure__photo"
+                  className="mk-cat_figure__photo"
                   src={photo.url}
                   alt={photo.breed || `cat photo ${index + 1}`}
                   loading="lazy"
                 />
-                <figcaption className="mk-cat-figure__caption">
+                <figcaption className="mk-cat_figure__caption">
                   {photo.breed || 'mystery cat'}
                   {photo.origin !== '' ? ` · from ${photo.origin}` : ''}
                 </figcaption>

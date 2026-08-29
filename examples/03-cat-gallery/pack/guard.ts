@@ -1,12 +1,12 @@
 /**
- * Shared defensive helpers for the `hn` pack.
+ * Shared defensive helpers for the `cat` pack.
  *
  * The reference renderer's own `safe-data`/`failure-presentation` modules
  * are internal to `@markii/react` (not exported through the package's
  * subpaths), and a third-party pack must bring its own hostile-value
  * discipline anyway: spec §4 requires a component to never throw on a
  * misbehaving host value, and a pack's internals are the embedding app's
- * to guard. Every `hn-*` component therefore routes all extraction of its
+ * to guard. Every `cat_*` component therefore routes all extraction of its
  * bound `data` through `safeExtract`, only ever lets primitives (strings
  * and finite numbers) escape the guard, and surfaces a failed or stale
  * binding exactly the way the reference components do: a `title` tooltip
