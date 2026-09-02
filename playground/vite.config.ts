@@ -21,6 +21,7 @@ export default defineConfig({
       { find: /^react-dom$/, replacement: path.resolve(import.meta.dirname, 'node_modules/react-dom') },
       { find: /^@markii\/react$/, replacement: path.resolve(import.meta.dirname, 'node_modules/@markii/react') },
       { find: /^@markii\/lua$/, replacement: path.resolve(import.meta.dirname, 'node_modules/@markii/lua') },
+      { find: /^@markii\/bundle$/, replacement: path.resolve(import.meta.dirname, 'node_modules/@markii/bundle') },
     ],
   },
 });

@@ -4,7 +4,7 @@ import { renderMark, mergeRegistries } from '@markii/react';
 import { defaultRegistry } from '@markii/react/components';
 import { extractScripts, parse } from '@markii/core';
 import { createValueStore, runDocumentScripts } from '@markii/runtime';
-import type { RunSummary } from '@markii/runtime';
+import type { RunSummary, ScriptExecutor } from '@markii/runtime';
 import { createLuaExecutor } from '@markii/lua';
 import {
   createFetchNetProvider,
@@ -25,6 +25,8 @@ import { getParseStatus } from './parse-status';
 import { EXAMPLES } from './examples';
 import type { ExampleDoc } from './examples';
 import { NavBar } from './NavBar';
+import { BundleFilePanel } from './BundleFilePanel';
+import { applyBundleImageUrls } from './document-images';
 import { hnRegistry } from '../../examples/02-hn-pulse/pack';
 import { catRegistry } from '../../examples/03-cat-gallery/pack';
 
@@ -40,32 +42,43 @@ const DEBOUNCE_MS = 200;
 const registry = mergeRegistries(defaultRegistry, hnRegistry, catRegistry);
 
 /**
- * The Lua executor closes over one fixed capability configuration for the
- * whole session: a real `fetch`-backed `NetProvider`, the demo's GET grants
- * (see `DEMO_NET_GRANTS` in `script-host.ts`), and an in-memory
- * `CacheProvider`. Built once at module scope (not per render/run) —
- * matching how `@markii/lua`'s `LuaExecutorConfig` doc comment describes
- * it: "captured once and reused for every script the returned executor
- * runs".
+ * SECURITY NOTE (spec §10): every executor this function builds runs
+ * wasmoon **on the main thread**. Per docs/security.md, a real host MUST
+ * run note scripts in a dedicated, terminatable Web Worker with an
+ * EXTERNAL wall-clock watchdog that calls `terminate()`, since in-VM
+ * limits alone cannot guarantee a hostile or hung script can be stopped.
+ * Running on the main thread here is acceptable ONLY because this is a
+ * showcase executing its own *curated* example scripts, not a host
+ * rendering untrusted notes. Do not copy this pattern into a production
+ * renderer.
  *
- * SECURITY NOTE (spec §10): this executor runs wasmoon **on the main
- * thread**. Per docs/security.md, a real host MUST run note scripts in a
- * dedicated, terminatable Web Worker with an EXTERNAL wall-clock watchdog
- * that calls `terminate()` — in-VM limits alone cannot guarantee a hostile
- * or hung script can be stopped. Running on the main thread here is
- * acceptable ONLY because this is a showcase executing its own *curated*
- * example scripts, not a host rendering untrusted notes. Do not copy this
- * pattern into a production renderer.
+ * The executor used to be a single module-scope constant, built once for
+ * the whole session. The bundle example needs a different capability
+ * configuration (a `bundle: ScriptView` so `bundle.read` and bundle-local
+ * `require` resolve, see `@markii/lua`'s `RunScriptOptions.bundle` doc
+ * comment) than the three plain-file examples, which pass none. `App`
+ * therefore builds one executor per example, memoized on the example
+ * itself, so switching examples rebuilds it but neither a render nor a
+ * keystroke does, matching `LuaExecutorConfig`'s own doc comment: "captured
+ * once and reused for every script the returned executor runs".
  */
-const luaExecutor = createLuaExecutor({
-  net: createFetchNetProvider(),
-  netGrants: DEMO_NET_GRANTS,
-  cache: createMemoryCacheProvider(),
-  // Local bundled asset (see the `wasmUrl` import above) — keeps this app
-  // offline-capable instead of depending on the unpkg CDN at script-run
-  // time.
-  wasmUri: wasmUrl,
-});
+function buildLuaExecutor(doc: ExampleDoc): ScriptExecutor {
+  return createLuaExecutor({
+    net: createFetchNetProvider(),
+    netGrants: DEMO_NET_GRANTS,
+    cache: createMemoryCacheProvider(),
+    // Local bundled asset (see the `wasmUrl` import above): keeps this app
+    // offline-capable instead of depending on the unpkg CDN at script-run
+    // time.
+    wasmUri: wasmUrl,
+    // Bundle-scoped filesystem (docs/scripting.md §11): present only for the
+    // one example that is a directory-form bundle. Serves BOTH
+    // `bundle.read("assets/...")` and bundle-local `require "scripts/..."`
+    // through the SAME `ScriptView` and path-jail (`@markii/lua`'s
+    // `require.ts`).
+    bundle: doc.bundle?.scriptView,
+  });
+}
 
 type RunState =
   | { phase: 'idle' }
@@ -193,6 +206,40 @@ export function App(): ReactElement {
 
   const doc = docAt(exampleIndex);
 
+  // Rebuilt only when the selected example changes (see `buildLuaExecutor`'s
+  // doc comment), never on every render or keystroke, and never shared
+  // across examples with different bundle wiring.
+  const luaExecutor = useMemo(() => buildLuaExecutor(doc), [doc]);
+
+  // Resolves a `src=scripts/etl.lua` reference (docs/scripting.md) through
+  // the current example's bundle storage, when it has one. A plain-file
+  // example's `doc.bundle` is undefined, so this always rejects for it,
+  // matching `runDocumentScripts`' documented behavior for a `src=` block
+  // with no `loadSource` at all (recorded as that one script's error,
+  // never thrown out of the batch).
+  const loadSource = useCallback(
+    async (src: string): Promise<string> => {
+      const bundle = doc.bundle;
+      if (!bundle) {
+        throw new Error(`no bundle is open; cannot resolve src "${src}"`);
+      }
+      const bytes = await bundle.scriptView.read(src);
+      if (!bytes) {
+        throw new Error(`no such bundle file "${src}"`);
+      }
+      return new TextDecoder().decode(bytes);
+    },
+    [doc],
+  );
+
+  // Rewrites relative `<img src>` values against the current example's
+  // bundle assets after every render (see `document-images.ts`'s doc
+  // comment for why this is a DOM post-process rather than a renderer
+  // hook: `@markii/react`'s `renderMark` has no base-URI/asset-resolution
+  // seam). A no-op for the three plain-file examples, whose `doc.bundle` is
+  // undefined.
+  const previewRef = useRef<HTMLDivElement>(null);
+
   const navigateTo = useCallback((next: number): void => {
     setExampleIndex(next);
     setSource(docAt(next).source);
@@ -238,10 +285,11 @@ export function App(): ReactElement {
       executor: luaExecutor,
       trigger: 'manual',
       store: storeRef.current,
+      loadSource,
     });
     setRunState({ phase: 'done', summary });
     setRenderVersion((v) => v + 1);
-  }, [source]);
+  }, [source, luaExecutor, loadSource]);
 
   const isRunning = runState.phase === 'running';
   // `renderVersion` has no meaningful value of its own — it is included
@@ -251,6 +299,15 @@ export function App(): ReactElement {
     () => renderMark(debounced, registry, storeRef.current),
     [debounced, renderVersion],
   );
+
+  // Runs after every render this DOM commits, including a live edit: React
+  // has already written the (unresolved) relative `src` values by the time
+  // this fires, so a resolvable bundle image is corrected immediately after.
+  useEffect(() => {
+    if (previewRef.current) {
+      applyBundleImageUrls(previewRef.current, doc.bundle?.assetUrls);
+    }
+  });
 
   return (
     <div className="playground">
@@ -286,11 +343,13 @@ export function App(): ReactElement {
         />
       )}
       <main
-        className={
-          previewOnly
-            ? 'playground__panes playground__panes--preview-only'
-            : 'playground__panes'
-        }
+        className={[
+          'playground__panes',
+          previewOnly ? 'playground__panes--preview-only' : '',
+          !previewOnly && doc.bundle ? 'playground__panes--with-bundle' : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
       >
         {!previewOnly && (
           <section className="playground__pane">
@@ -328,7 +387,7 @@ export function App(): ReactElement {
           </div>
           <div className="playground__preview">
             <PreviewErrorBoundary resetKey={debounced}>
-              <div className="doc">{preview}</div>
+              <div className="doc" ref={previewRef}>{preview}</div>
             </PreviewErrorBoundary>
           </div>
           {!previewOnly && (
@@ -344,6 +403,7 @@ export function App(): ReactElement {
             </>
           )}
         </section>
+        {!previewOnly && doc.bundle && <BundleFilePanel bundle={doc.bundle} />}
       </main>
       {!previewOnly && (
         <footer className="playground__footnote">

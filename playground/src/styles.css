@@ -423,3 +423,90 @@ body {
   justify-content: center;
 }
 
+/*
+ * The bundle example adds a third pane (BundleFilePanel) beside Source and
+ * Preview, so its grid gets a narrower fixed third column instead of the
+ * plain examples' even 1fr/1fr split. Only applied when `App.tsx` renders
+ * the panel, so the other three examples' layout is untouched.
+ */
+.playground__panes--with-bundle {
+  grid-template-columns: 1fr 1fr minmax(220px, 300px);
+}
+
+.playground__bundle-pane {
+  border-left: 1px solid #e2e2e5;
+}
+
+.playground__bundle-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.playground__bundle-file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  border-bottom: 1px solid #eee;
+  overflow-x: auto;
+}
+
+.playground__bundle-file {
+  border: 1px solid #e2e2e5;
+  border-radius: 4px;
+  background: #fafafb;
+  color: #444;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.playground__bundle-file--active {
+  background: #eef1ff;
+  border-color: #b8c2f0;
+  color: #1a1a1a;
+}
+
+.playground__bundle-viewer {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.75rem 1rem;
+}
+
+.playground__bundle-text {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.75rem;
+  color: #1a1a1a;
+}
+
+.playground__bundle-image {
+  max-width: 100%;
+  display: block;
+}
+
+.playground__bundle-empty {
+  margin: 0;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.playground__bundle-note {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid #eee;
+  background: #fafafb;
+  color: #666;
+  font-size: 0.75rem;
+}
+

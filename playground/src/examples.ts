@@ -1,8 +1,19 @@
+import { LOADED_BUNDLES } from './bundle-loader';
+import type { LoadedBundle } from './bundle-loader';
+
 export interface ExampleDoc {
   slug: string;
   title: string;
   description: string;
   source: string;
+  /**
+   * Present only for an example that is a directory-form `.mkz` bundle
+   * (today: "04-edge-status.mkz"). `App.tsx` uses this field, rather than
+   * matching on the slug string, to tell a bundle example apart from a
+   * plain-file one: the file panel and the bundle-aware Run wiring both key
+   * off its presence.
+   */
+  bundle?: LoadedBundle;
 }
 
 /**
@@ -47,13 +58,18 @@ function buildIndex(): ExampleDoc[] {
     // '../../examples/…' from playground/src/ — a fixed index like [1]
     // would silently shift to 'examples' when the app moves).
     const dir = path.split('/').at(-2) ?? '';
-    const slug = dir.replace(/^\d+-/, '');
+    // Strip the "NN-" sort prefix, then a trailing ".mkz" bundle suffix
+    // (a plain-file example has none, so this is a no-op for those), so a
+    // bundle example's slug/URL hash matches its siblings' shape:
+    // "04-edge-status.mkz" -> "edge-status".
+    const slug = dir.replace(/^\d+-/, '').replace(/\.mkz$/, '');
     const frontmatter = parseFrontmatter(source);
     return {
       slug,
       title: frontmatter.title ?? slug,
       description: frontmatter.description ?? '',
       source,
+      bundle: LOADED_BUNDLES.get(dir),
     };
   });
 }
