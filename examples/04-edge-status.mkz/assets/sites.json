@@ -1,0 +1,47 @@
+[
+  {
+    "id": "sfo-edge",
+    "name": "San Francisco Edge",
+    "region": "North America",
+    "city": "San Francisco",
+    "lat": 37.7749,
+    "lon": -122.4194,
+    "max_wind_kmh": 45
+  },
+  {
+    "id": "nyc-edge",
+    "name": "New York Edge",
+    "region": "North America",
+    "city": "New York",
+    "lat": 40.7128,
+    "lon": -74.006,
+    "max_wind_kmh": 50
+  },
+  {
+    "id": "lon-edge",
+    "name": "London Edge",
+    "region": "Europe",
+    "city": "London",
+    "lat": 51.5074,
+    "lon": -0.1278,
+    "max_wind_kmh": 55
+  },
+  {
+    "id": "tyo-edge",
+    "name": "Tokyo Edge",
+    "region": "Asia",
+    "city": "Tokyo",
+    "lat": 35.6762,
+    "lon": 139.6503,
+    "max_wind_kmh": 40
+  },
+  {
+    "id": "syd-edge",
+    "name": "Sydney Edge",
+    "region": "Oceania",
+    "city": "Sydney",
+    "lat": -33.8688,
+    "lon": 151.2093,
+    "max_wind_kmh": 50
+  }
+]

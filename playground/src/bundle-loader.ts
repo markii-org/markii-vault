@@ -1,7 +1,7 @@
 import {
+  createMemoryBundleStorage,
   createScriptView,
   grantAllDeclaredPermissions,
-  normalizeOrThrow,
   parseManifest,
 } from '@markii/bundle';
 import type { BundleManifest, BundleStorage, ScriptView } from '@markii/bundle';
@@ -15,12 +15,10 @@ import type { BundleManifest, BundleStorage, ScriptView } from '@markii/bundle';
  * generic, and the grouping-by-bundle-root logic below works for any number
  * of `*.mkz` folders.
  *
- * The published @markii/bundle package (0.12.0) ships no in-memory
- * `BundleStorage` of its own (only the browser-safe zip form and a
- * Node-only directory form). See the gap noted in this batch's report. This
- * module is the minimal implementation the interface's own doc comment
- * calls for: every path argument is routed through the package's
- * `normalizeOrThrow`, never a second, locally-invented path check.
+ * The storage itself is `@markii/bundle`'s own `createMemoryBundleStorage`
+ * (0.13.0), a third `BundleStorage` form beside the zip and directory forms,
+ * backed by a plain map. Every path it is given already routes through the
+ * package's own path jail, so this module never reimplements one.
  *
  * The two glob patterns below (text extensions read via `?raw`, everything
  * else assumed binary and loaded via `?url`) are written INLINE as string
@@ -77,7 +75,11 @@ export interface LoadedBundle {
   scriptView: ScriptView;
   /** Every file in the bundle, sorted by path, for the read-only file panel. */
   files: BundleFile[];
-  /** Bundle-relative path -> resolved asset URL, for rewriting `<img src>` after render. */
+  /**
+   * Bundle-relative path -> resolved asset URL, passed to `renderMark` as
+   * `App.tsx`'s `resolveImageSrc` option (`@markii/react` 0.13.0) so a
+   * relative `<img src>` resolves during the render itself.
+   */
   assetUrls: Record<string, string>;
 }
 
@@ -101,88 +103,22 @@ function splitBundlePath(
 }
 
 /**
- * The minimal `BundleStorage` this bundle-loader needs: an in-memory,
- * read-mostly view over the files Vite's glob loaded at build time.
- *
- * Every method routes `path` through `normalizeOrThrow` FIRST, before
- * touching either map, per `@markii/bundle`'s own doc comment on
- * `BundleStorage`, that is the one and only path-jail choke point, and a
- * storage implementation that skipped it would unjail every `ScriptView`
- * built on top of it. Nothing here re-implements or duplicates that check.
- *
- * `write` is a session-scoped no-op in the sense that matters: nothing
- * persists across a page reload, and this bundle's manifest declares only
- * `["read"]` under `permissions.bundle` (no `write:cache/`), so
- * `createScriptView`'s grant intersection means a script's `bundle.write`
- * call is denied by the `ScriptView` layer before it would ever reach this
- * class. The map below exists purely so the interface is genuinely
- * satisfied (a write that WOULD be granted does not silently vanish
- * mid-session), not because this playground offers any durable cache.
+ * The bundle-relative text files (manifest, document, `scripts/*.lua`, and
+ * `assets/*.json`) as a plain record, the shape `createMemoryBundleStorage`
+ * takes. Binary assets (images) are left out: nothing in this vault ever
+ * calls `bundle.read` on one, they reach the page through `assetUrls`
+ * instead (built straight from Vite's `?url` glob, see `buildBundle`
+ * below), and `createMemoryBundleStorage` needs their bytes up front rather
+ * than lazily, which the build-time `?url` string alone cannot provide.
  */
-class MemoryBundleStorage implements BundleStorage {
-  private readonly text = new Map<string, string>();
-  private readonly urls = new Map<string, string>();
-  private readonly writes = new Map<string, Uint8Array>();
-
-  constructor(files: readonly BundleFile[]) {
-    for (const file of files) {
-      if (file.kind === 'text' && file.content !== undefined) {
-        this.text.set(file.path, file.content);
-      } else if (file.kind === 'url' && file.url !== undefined) {
-        this.urls.set(file.path, file.url);
-      }
+function textFilesFor(files: readonly BundleFile[]): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const file of files) {
+    if (file.kind === 'text' && file.content !== undefined) {
+      result[file.path] = file.content;
     }
   }
-
-  async read(path: string): Promise<Uint8Array | undefined> {
-    const normalized = normalizeOrThrow(path);
-    const write = this.writes.get(normalized);
-    if (write !== undefined) return write;
-    const text = this.text.get(normalized);
-    if (text !== undefined) return new TextEncoder().encode(text);
-    const url = this.urls.get(normalized);
-    if (url !== undefined) {
-      const response = await fetch(url);
-      return new Uint8Array(await response.arrayBuffer());
-    }
-    return undefined;
-  }
-
-  async write(path: string, data: Uint8Array): Promise<void> {
-    const normalized = normalizeOrThrow(path);
-    this.writes.set(normalized, data);
-  }
-
-  async list(): Promise<string[]> {
-    const paths = new Set<string>([
-      ...this.text.keys(),
-      ...this.urls.keys(),
-      ...this.writes.keys(),
-    ]);
-    return [...paths].sort();
-  }
-
-  async exists(path: string): Promise<boolean> {
-    const normalized = normalizeOrThrow(path);
-    return (
-      this.text.has(normalized) ||
-      this.urls.has(normalized) ||
-      this.writes.has(normalized)
-    );
-  }
-
-  async size(path: string): Promise<number | undefined> {
-    const normalized = normalizeOrThrow(path);
-    const write = this.writes.get(normalized);
-    if (write !== undefined) return write.length;
-    const text = this.text.get(normalized);
-    if (text !== undefined) return new TextEncoder().encode(text).length;
-    if (this.urls.has(normalized)) {
-      const bytes = await this.read(normalized);
-      return bytes?.length;
-    }
-    return undefined;
-  }
+  return result;
 }
 
 function buildBundle(dirName: string, files: BundleFile[]): LoadedBundle {
@@ -197,7 +133,9 @@ function buildBundle(dirName: string, files: BundleFile[]): LoadedBundle {
     : [`manifest.json failed to parse: ${parsed.errors.join('; ')}`];
 
   const sortedFiles = [...files].sort((a, b) => a.path.localeCompare(b.path));
-  const storage = new MemoryBundleStorage(sortedFiles);
+  const storage: BundleStorage = createMemoryBundleStorage(
+    textFilesFor(sortedFiles),
+  );
   const scriptView = createScriptView(
     storage,
     manifest,

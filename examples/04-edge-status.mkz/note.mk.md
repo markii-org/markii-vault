@@ -67,7 +67,7 @@ a short block is fine to keep right here.
 
 :::details{title="Why a bundle"}
 
-- **Portability.** `manifest.json`, `note.mk.md`, `assets/sites.csv`,
+- **Portability.** `manifest.json`, `note.mk.md`, `assets/sites.json`,
   `assets/diagram.png`, and `scripts/etl.lua` and `scripts/util.lua` travel
   together. Copy the folder, or zip it into `edge-status.mkz`, and nothing
   is left behind.
@@ -78,14 +78,18 @@ a short block is fine to keep right here.
   ever runs the script, to work out which hostname to ask permission for;
   a URL built from a variable or joined with `..` offers no hostname to
   grant and is denied at run time. That is why the coordinates are typed
-  out in the script itself instead of read out of `assets/sites.csv`, even
+  out in the script itself instead of read out of `assets/sites.json`, even
   though the same five sites, in the same order, also live in that file as
   plain, human-readable metadata (name, region, wind threshold). It is a
   deliberate redundancy, not an oversight, and `etl.lua` checks that the
   two lists still agree on count before it trusts either one.
-- **No committed cache.** There is no `.cache/` folder in this bundle.
-  Nothing is stored until a host actually runs the note; the table and
-  stats above are blank on a first open until you press Run.
+- **The cache lives in memory only.** This bundle's manifest grants
+  `write:.cache/`, and `scripts/etl.lua` writes its fetched result to
+  `.cache/edge-status.json` after every successful run. In the playground,
+  that write stays in the browser tab's memory for the session; nothing is
+  written back to this repository, so the committed bundle carries no
+  `.cache/` folder of its own, and the table and stats above are still
+  blank on a first open until you press Run.
 
 :::
 

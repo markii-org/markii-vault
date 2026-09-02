@@ -69,9 +69,11 @@ export function BundleFilePanel({
         </div>
       </div>
       <p className="playground__bundle-note">
-        This bundle is opened read-only, in memory: its manifest grants only
-        {' '}<code>read</code>, so a script write is denied, and nothing here
-        persists past this browser tab.
+        This bundle is opened in memory: its manifest grants <code>read</code>
+        {' '}and <code>write:.cache/</code>, so <code>scripts/etl.lua</code>
+        {' '}can write its fetched result under <code>.cache/</code> on a run.
+        Those writes are kept in memory for this browser tab only; nothing is
+        written back to this repository's files.
       </p>
     </section>
   );

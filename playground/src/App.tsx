@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
 import { renderMark, mergeRegistries } from '@markii/react';
+import type { ResolveImageSrc } from '@markii/react';
 import { defaultRegistry } from '@markii/react/components';
 import { extractScripts, parse } from '@markii/core';
 import { createValueStore, runDocumentScripts } from '@markii/runtime';
@@ -26,11 +27,26 @@ import { EXAMPLES } from './examples';
 import type { ExampleDoc } from './examples';
 import { NavBar } from './NavBar';
 import { BundleFilePanel } from './BundleFilePanel';
-import { applyBundleImageUrls } from './document-images';
 import { hnRegistry } from '../../examples/02-hn-pulse/pack';
 import { catRegistry } from '../../examples/03-cat-gallery/pack';
 
 const DEBOUNCE_MS = 200;
+
+/**
+ * Normalizes a relative image `src` into the key form `assetUrls` (built
+ * by `bundle-loader.ts` from the bundle's own file list) uses: strips
+ * leading `./` segments and a leading `/`, so `assets/diagram.png`,
+ * `./assets/diagram.png`, and `/assets/diagram.png` all look up the same
+ * entry. Never resolves `..`: a lookup key containing one simply will not
+ * be in the map, since the map is built only from paths the bundle
+ * loader's own glob actually found.
+ */
+function assetLookupKey(value: string): string {
+  let result = value;
+  while (result.startsWith('./')) result = result.slice(2);
+  while (result.startsWith('/')) result = result.slice(1);
+  return result;
+}
 
 /**
  * The vault's registry: the standard component set plus every pack the
@@ -232,13 +248,24 @@ export function App(): ReactElement {
     [doc],
   );
 
-  // Rewrites relative `<img src>` values against the current example's
-  // bundle assets after every render (see `document-images.ts`'s doc
-  // comment for why this is a DOM post-process rather than a renderer
-  // hook: `@markii/react`'s `renderMark` has no base-URI/asset-resolution
-  // seam). A no-op for the three plain-file examples, whose `doc.bundle` is
-  // undefined.
   const previewRef = useRef<HTMLDivElement>(null);
+
+  // Resolves a relative `<img src>` against the current example's bundle
+  // assets, passed to `renderMark` as `options.resolveImageSrc`
+  // (`@markii/react` 0.13.0). `@markii/react` already filters out any
+  // source that already carries a scheme, a protocol-relative form, a
+  // bare fragment, or an empty value before calling this, and re-checks
+  // whatever it returns against `javascript:`/`vbscript:`, so this only
+  // needs to do the lookup. Returning `undefined` for the three
+  // plain-file examples, whose `doc.bundle` is undefined, leaves their
+  // `<img src>` exactly as written — the same thing that happened before
+  // this option existed, since a relative source there (e.g. `baku.jpg`)
+  // already resolves against the playground's own page and needs no
+  // rewriting.
+  const resolveImageSrc = useCallback<ResolveImageSrc>(
+    (src) => doc.bundle?.assetUrls[assetLookupKey(src)],
+    [doc],
+  );
 
   const navigateTo = useCallback((next: number): void => {
     setExampleIndex(next);
@@ -296,18 +323,12 @@ export function App(): ReactElement {
   // purely so this memo recomputes after a run mutates `storeRef.current`
   // in place (see the doc comment above `renderVersion`'s declaration).
   const preview = useMemo(
-    () => renderMark(debounced, registry, storeRef.current),
-    [debounced, renderVersion],
+    () =>
+      renderMark(debounced, registry, storeRef.current, undefined, {
+        resolveImageSrc,
+      }),
+    [debounced, renderVersion, resolveImageSrc],
   );
-
-  // Runs after every render this DOM commits, including a live edit: React
-  // has already written the (unresolved) relative `src` values by the time
-  // this fires, so a resolvable bundle image is corrected immediately after.
-  useEffect(() => {
-    if (previewRef.current) {
-      applyBundleImageUrls(previewRef.current, doc.bundle?.assetUrls);
-    }
-  });
 
   return (
     <div className="playground">
