@@ -29,8 +29,7 @@ The Edge Site Status Board is a bundle rather than a single file, and the playgr
 [cat-img]: https://github.com/user-attachments/assets/a11390c0-145c-4e45-94ec-149d6e28a38d
 
 [edge-link]: https://sadigaxund.github.io/markii-vault/#edge-status
-<!-- TODO: needs a real screenshot URL from the user -->
-[edge-img]: https://github.com/user-attachments/assets/REPLACE-WITH-SCREENSHOT
+[edge-img]: https://github.com/user-attachments/assets/0debbf28-6ea6-456d-bbde-60bbc1ab37aa
 
 ## License
 
