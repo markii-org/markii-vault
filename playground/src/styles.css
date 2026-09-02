@@ -510,3 +510,34 @@ body {
   font-size: 0.75rem;
 }
 
+/*
+ * The playground's chrome is light in every OS setting, so the rendered
+ * note is pinned to doc.css's light palette instead of following the OS
+ * dark preference, which would otherwise render a dark note inside a
+ * light app. This redeclares, property for property, the same fifteen
+ * `.doc` custom properties doc.css sets under
+ * `@media (prefers-color-scheme: dark)`, each restored to doc.css's light
+ * value. This stylesheet is imported after `@markii/react/doc.css` in
+ * `main.tsx`, so at equal specificity these declarations win the cascade
+ * regardless of the reader's OS preference.
+ */
+@media (prefers-color-scheme: dark) {
+  .doc {
+    --mk-bg: #fff;
+    --mk-raised: #fff;
+    --mk-fg: #1a1a1a;
+    --mk-surface: #f4f4f5;
+    --mk-surface-strong: #f0f0f2;
+    --mk-border: #e4e4e7;
+    --mk-muted: #52525b;
+    --mk-faint: #94a3b8;
+    --mk-accent: #3b82f6;
+    --mk-on-accent: #fff;
+
+    --mk-info: #3b82f6;
+    --mk-success: #15803d;
+    --mk-warning: #d97706;
+    --mk-danger: #dc2626;
+    --mk-limit: #7c3aed;
+  }
+}
