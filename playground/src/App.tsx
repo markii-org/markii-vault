@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactElement } from 'react';
 import { renderMark, mergeRegistries } from '@markii/react';
-import type { ResolveImageSrc } from '@markii/react';
+import type { ResolveImageSrc, RenderMarkOptions } from '@markii/react';
 import { defaultRegistry } from '@markii/react/components';
 import { extractScripts, parse } from '@markii/core';
 import { createValueStore, runDocumentScripts } from '@markii/runtime';
@@ -267,6 +267,18 @@ export function App(): ReactElement {
     [doc],
   );
 
+  // Routes a render's quiet markers (a recognized-but-declined attribute
+  // value, an unsafe figure source) to the browser console, this
+  // playground's diagnostics surface — there is no dedicated panel, and
+  // AGENTS.md's "clean is not silent" rule requires the reason to reach
+  // somewhere other than the in-page marker's tooltip.
+  const onDiagnostic = useCallback<NonNullable<RenderMarkOptions['onDiagnostic']>>(
+    (event) => {
+      console.warn(`[markii] ${event.message}`, event);
+    },
+    [],
+  );
+
   const navigateTo = useCallback((next: number): void => {
     setExampleIndex(next);
     setSource(docAt(next).source);
@@ -326,8 +338,9 @@ export function App(): ReactElement {
     () =>
       renderMark(debounced, registry, storeRef.current, undefined, {
         resolveImageSrc,
+        onDiagnostic,
       }),
-    [debounced, renderVersion, resolveImageSrc],
+    [debounced, renderVersion, resolveImageSrc, onDiagnostic],
   );
 
   return (
