@@ -1,5 +1,5 @@
 # Markii Vault
-[![Live Demo](https://img.shields.io/badge/Live_App-Online-success?style=flat)](https://sadigaxund.github.io/markii-vault/)
+[![Live Demo](https://img.shields.io/badge/Live_App-Online-success?style=flat)](https://markii-org.github.io/markii-vault/)
 [![See Repo](https://img.shields.io/badge/See_Repo-GitHub-success?style=flat)](https://github.com/sadigaxund/markii)
 
 Curated examples of the `Markii` file format
@@ -20,18 +20,18 @@ Markii is an extensible markdown format that you can upgrade with your own React
 The Edge Site Status Board is a bundle rather than a single file, and the playground opens it as one: the note appears beside the files it carries (its manifest, scripts, data file, and image), and Run executes its scripts straight out of the bundle.
 
 <!-- You can dump all these references at the absolute bottom of your README file -->
-[tour-link]: https://sadigaxund.github.io/markii-vault/#tour
+[tour-link]: https://markii-org.github.io/markii-vault/#tour
 
-[baku-link]: https://sadigaxund.github.io/markii-vault/#baku-weather
+[baku-link]: https://markii-org.github.io/markii-vault/#baku-weather
 [baku-img]: https://github.com/user-attachments/assets/1db91eac-ddb7-434b-afe7-b6bfa766b1d3
 
-[hn-link]: https://sadigaxund.github.io/markii-vault/#hn-pulse
+[hn-link]: https://markii-org.github.io/markii-vault/#hn-pulse
 [hn-img]: https://github.com/user-attachments/assets/6f61478a-4631-4add-ba10-c537984b46a1
 
-[cat-link]: https://sadigaxund.github.io/markii-vault/#cat-gallery
+[cat-link]: https://markii-org.github.io/markii-vault/#cat-gallery
 [cat-img]: https://github.com/user-attachments/assets/a11390c0-145c-4e45-94ec-149d6e28a38d
 
-[edge-link]: https://sadigaxund.github.io/markii-vault/#edge-status
+[edge-link]: https://markii-org.github.io/markii-vault/#edge-status
 [edge-img]: https://github.com/user-attachments/assets/0debbf28-6ea6-456d-bbde-60bbc1ab37aa
 
 ## License
