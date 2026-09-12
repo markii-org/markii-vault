@@ -11,6 +11,7 @@ Markii is an extensible markdown format that you can upgrade with your own React
 ## Examples
 | Example | Description | URL | Screenshot |
 | --- | --- | --- | --- |
+| Format Tour | A guided tour of Markii, from directives to layout to scripting. Start here. | [#tour][tour-link] | |
 | Weather Forecast: Baku | A live weather dashboard for Baku, Azerbaijan, fed by Open-Meteo. | [#baku-weather][baku-link] | ![Baku Weather][baku-img] |
 | Tech Community Pulse | A live Hacker News pulse dashboard: trending threads, top domains, and comment velocity, fed by the Algolia HN Search API. | [#hn-pulse][hn-link] | ![HN Pulse][hn-img] |
 | Cat Gallery | Ten breed-accurate cat photos in a 5×2 wall plus an interactive breed finder, fed by the Cat API. | [#cat-gallery][cat-link] | ![Cat Gallery][cat-img] |
@@ -19,6 +20,8 @@ Markii is an extensible markdown format that you can upgrade with your own React
 The Edge Site Status Board is a bundle rather than a single file, and the playground opens it as one: the note appears beside the files it carries (its manifest, scripts, data file, and image), and Run executes its scripts straight out of the bundle.
 
 <!-- You can dump all these references at the absolute bottom of your README file -->
+[tour-link]: https://sadigaxund.github.io/markii-vault/#tour
+
 [baku-link]: https://sadigaxund.github.io/markii-vault/#baku-weather
 [baku-img]: https://github.com/user-attachments/assets/1db91eac-ddb7-434b-afe7-b6bfa766b1d3
 
